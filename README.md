@@ -19,55 +19,69 @@ If you are developing a production application, we recommend updating the config
 export default defineConfig([
   globalIgnores(['dist']),
   {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+    # Muslimah Travel — Frontend
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+    This repository contains the frontend of the Muslimah Travel application, built with React, TypeScript and Vite.
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+    Summary
+    - **Stack:** React, TypeScript, Vite, ESLint
+    - **Main source folder:** `src/`
+    - **Build tool:** Vite
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+    Prerequisites
+    - Node.js (recommended v18 or newer)
+    - npm (or pnpm / yarn)
+    - Git
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+    Installation
+    ```bash
+    cd frontend
+    npm install
+    ```
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+    Available scripts (from `package.json`)
+    - `npm run dev` — start development server (Vite with HMR)
+    - `npm run build` — production build (TypeScript build + Vite build)
+    - `npm run preview` — preview the production build locally
+    - `npm run lint` — run ESLint
+
+    Running in development
+    ```bash
+    cd frontend
+    npm install
+    npm run dev
+    ```
+
+    Build for production
+    ```bash
+    npm run build
+    # optional: preview build
+    npm run preview
+    ```
+
+    Environment variables
+    - If your app needs runtime configuration, create a `.env` file in the `frontend` folder. This file is ignored by git (`.gitignore`).
+
+    Git / Remote repository
+    - Remote repository: `https://github.com/Travel-Muslim/Frontend.git` (branch `main`).
+    - `node_modules/` is excluded via `.gitignore` and should not be pushed.
+
+    Change local Git author (optional)
+    ```bash
+    git config user.name "Your Name"
+    git config user.email "you@example.com"
+    ```
+
+    Contribution guide (short)
+    - Create a feature branch: `git checkout -b feat/your-feature`
+    - Commit with clear messages, push the branch, and open a Pull Request.
+
+    Security & privacy
+    - Do not commit secrets or credentials (e.g. `.env`, API keys). Use secure secret management.
+
+    Contact
+    - For help, contact the repository owner or your team lead.
+
+    ---
+    _This README was updated automatically on 2025-12-04. Please adapt it to your project's needs._
+    <!-- English version created on 2025-12-04 -->

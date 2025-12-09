@@ -1,0 +1,158 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  padding: 20px 40px;
+  border: none;
+  border-radius: 16px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  min-height: 60px;
+  font-family: 'Inter', sans-serif;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.btn:active {
+  transform: translateY(0);
+}
+
+.btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.btn--primary {
+  background-color: #6d4891;
+  color: #ffffff;
+}
+
+.btn--primary:hover {
+  background-color: #5d3a7a;
+}
+
+.btn--secondary {
+  background-color: #b49de4;
+  color: #444444;
+}
+
+.btn--secondary:hover {
+  background-color: #a58dd4;
+}
+
+.btn--tertiary {
+  background-color: #8b6fb8;
+  color: #ffffff;
+}
+
+.btn--tertiary:hover {
+  background-color: #7a5fa7;
+}
+
+/* Pink/Rose Variants */
+.btn--pink {
+  background-color: #f4b4c8;
+  color: #ffffff;
+}
+
+.btn--pink:hover {
+  background-color: #e3a3b7;
+}
+
+.btn--rose {
+  background-color: #d89bb0;
+  color: #ffffff;
+}
+
+.btn--rose:hover {
+  background-color: #c78a9f;
+}
+
+.btn--mauve {
+  background-color: #b07a91;
+  color: #ffffff;
+}
+
+.btn--mauve:hover {
+  background-color: #9f6980;
+}
+
+/* White Variant */
+.btn--white {
+  background-color: #ffffff;
+  color: #444444;
+}
+
+.btn--white:hover {
+  background-color: #f5f5f5;
+}
+
+/* Teal/Cyan Variants */
+.btn--teal-light {
+  background-color: #5dd9c1;
+  color: #ffffff;
+  border-radius: 50px;
+}
+
+.btn--teal-light:hover {
+  background-color: #4dc9b1;
+}
+
+.btn--teal {
+  background-color: #3ab89e;
+  color: #ffffff;
+  border-radius: 50px;
+}
+
+.btn--teal:hover {
+  background-color: #2aa88e;
+}
+
+.btn--teal-dark {
+  background-color: #2a7d6d;
+  color: #ffffff;
+  border-radius: 50px;
+}
+
+.btn--teal-dark:hover {
+  background-color: #1a6d5d;
+}
+
+/* Red/Pink Variants */
+.btn--red-light {
+  background-color: #ed8888;
+  color: #ffffff;
+  border-radius: 50px;
+}
+
+.btn--red-light:hover {
+  background-color: #dd7878;
+}
+
+.btn--red {
+  background-color: #c96969;
+  color: #ffffff;
+  border-radius: 50px;
+}
+
+.btn--red:hover {
+  background-color: #b95959;
+}
+
+.btn--red-dark {
+  background-color: #8b4949;
+  color: #ffffff;
+  border-radius: 50px;
+}
+
+.btn--red-dark:hover {
+  background-color: #7b3939;
+}

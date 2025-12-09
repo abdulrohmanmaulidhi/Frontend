@@ -1,260 +1,279 @@
+import React from "react";
 import "./Home.css";
+import Header from "../components/Header";
+import Button from "../components/Button";
+import StatCard from "../components/StatCard";
 
-type Destination = {
-  id: number;
-  title: string;
-  subtitle: string;
-  month: string;
-  image: string;
-};
-
-const DESTINATIONS: Destination[] = [
-  {
-    id: 1,
-    title: "Korea Halal Tour",
-    subtitle: "Paket Desember 2025",
-    month: "Desember 2025",
-    image: "/Dest1.png",
-  },
-  {
-    id: 2,
-    title: "Uzbekistan Halal Tour",
-    subtitle: "Paket November 2025",
-    month: "November 2025",
-    image: "/Dest2.png",
-  },
-  {
-    id: 3,
-    title: "Japan Halal Tour",
-    subtitle: "Paket Oktober 2025",
-    month: "Oktober 2025",
-    image: "Dest3.png",
-  },
-];
-
-export default function Home() {
+function HeroSection() {
   return (
-    <div className="lp-root">
-      <section id="hero" className="lp-hero">
-        <div className="lp-hero-inner">
-          <div className="lp-hero-bg" />
-          <div className="lp-hero-overlay">
-            <div className="lp-hero-text">
-              <h1>Mulailah Perjalanan Halalmu Sekarang</h1>
-              <p>
-                Temukan destinasi, akomodasi, dan pengalaman perjalanan yang
-                aman serta sesuai syariah. Jelajahi dunia dengan rasa tenang,
-                penuh keyakinan, dan tetap menjaga nilai-nilai sebagai muslimah.
-              </p>
-            </div>
-            
-            <button className="lp-hero-cta">Cari Sekarang</button>
-          </div>
+    <section className="hero-section">
+      <div className="hero-bg">
+        <img src="/src/assets/hero-bg.png" alt="Hero Background" className="hero-bg-image" />
+        <div className="hero-overlay" />
+      </div>
+      <div className="hero-content">
+        <h1 className="hero-title">Mulailah Perjalanan Halalmu Sekarang</h1>
+        <p className="hero-desc">
+          Temukan destinasi, akomodasi, dan pengalaman perjalanan yang aman serta sesuai syariah. 
+          Jelajahi dunia dengan rasa tenang, penuh keyakinan, dan tetap menjaga nilai-nilai sebagai muslimah.
+        </p>
+        <div className="hero-btn-wrapper">
+          <Button className="btn purple-light" variant="purple-light" showArrows={false}>
+            Cari Sekarang
+          </Button>
         </div>
-      </section>
-      <section className="lp-search-section">
-        <form className="lp-search-bar">
-          <div className="lp-search-item lp-search-item-border">
-            <span className="lp-search-label">Dari</span>
-            <button type="button" className="lp-search-pill">
-              <span>Pilih kota keberangkatan</span>
-              <span className="lp-pill-caret">▾</span>
-            </button>
-          </div>
-          <div className="lp-search-item lp-search-item-border">
-            <span className="lp-search-label">Ke</span>
-            <button type="button" className="lp-search-pill">
-              <span>Pilih destinasi</span>
-              <span className="lp-pill-caret">▾</span>
-            </button>
-          </div>
-          <div className="lp-search-item lp-search-item-border">
-            <span className="lp-search-label">Pergi</span>
-            <button type="button" className="lp-search-pill">
-              <span>dd/mm/yyyy</span>
-              <span className="lp-pill-caret">▾</span>
-            </button>
-          </div>
-          <button type="submit" className="lp-search-btn">
-            <img src="/search.svg" alt="" className="lp-search-btn-icon" />
-            <span>Cari Destinasi</span>
+      </div>
+    </section>
+  );
+}
+
+function SearchBar() {
+  return (
+    <div className="search-bar-wrapper">
+      <div className="search-bar">
+        <div className="search-field">
+          <span className="search-label">Dari</span>
+          <button className="search-dropdown" aria-label="Pilih asal">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9L12 15L18 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
           </button>
-        </form>
-      </section>
-      <section id="destinasi" className="lp-section lp-section-dest">
-        <div className="lp-section-head lp-section-head-dest">
-          <div>
-            <p className="lp-section-label">Perjalanan terbaik kami</p>
-            <h2>Wisata Halal Pilihan Muslimah</h2>
-          </div>
-          <p className="lp-section-subright">
-            Nikmati setiap destinasi yang terjamin keamanannya, dan jelajahi
-            keindahan alam yang menenangkan.
-          </p>
         </div>
 
-        <div className="lp-card-grid">
-          {DESTINATIONS.map((d) => (
-            <article key={d.id} className="lp-card">
-              <div
-                className="lp-card-img"
-                style={{ backgroundImage: `url(${d.image})` }}
-              />
-              <div className="lp-card-body">
-                <span className="lp-card-date">{d.month}</span>
-                <h3>{d.title}</h3>
-                <p>{d.subtitle}</p>
+        <div className="search-divider" />
+
+        <div className="search-field">
+          <span className="search-label">Ke</span>
+          <button className="search-dropdown" aria-label="Pilih tujuan">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9L12 15L18 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <div className="search-divider" />
+
+        <div className="search-field">
+          <span className="search-label">Pergi</span>
+          <button className="search-dropdown" aria-label="Pilih tanggal pergi">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+              <path d="M6 9L12 15L18 9" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </button>
+        </div>
+
+        <button className="search-btn" aria-label="Cari Destinasi">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+            <circle cx="11" cy="11" r="8" stroke="white" strokeWidth="2"/>
+            <path d="M21 21L16.65 16.65" stroke="white" strokeWidth="2" strokeLinecap="round"/>
+          </svg>
+          <span>Cari Destinasi</span>
+        </button>
+      </div>
+    </div>
+  );
+}
+
+function DestinationsSection() {
+  const cards = [
+    {
+      id: 1,
+      date: "Paket Desember 2025",
+      title: "Korea Halal Tour",
+      img: "/src/assets/dest1.png",
+    },
+    {
+      id: 2,
+      date: "Paket November 2025",
+      title: "Uzbekistan Halal Tour",
+      img: "/src/assets/dest2.png",
+    },
+    {
+      id: 3,
+      date: "Paket Oktober 2025",
+      title: "Japan Halal Tour",
+      img: "/src/assets/dest3.png",
+    },
+  ];
+
+  return (
+    <section className="destinations-section new-destinations-section">
+      <div className="destinations-inner">
+        <div className="destinations-head">
+          <div className="dest-left">
+            <p className="section-subtitle">Perjalanan terbaik kami</p>
+            <h2 className="section-title">Wisata Halal Pilihan Muslimah</h2>
+          </div>
+          <div className="dest-right">
+            <p className="section-desc">
+              Nikmati setiap destinasi yang terjamin keamanannya, dan jelajahi keindahan alam yang menenangkan
+            </p>
+          </div>
+        </div>
+
+        <div className="dest-grid new-dest-grid" role="list">
+          {cards.map((c) => (
+            <article className="dest-card new-dest-card" key={c.id} role="listitem" aria-label={c.title}>
+              <div className="dest-card-media">
+                <img src={c.img} alt={c.title} />
+              </div>
+              <div className="dest-card-body">
+                <p className="dest-card-date">{c.date}</p>
+                <h3 className="dest-card-title">{c.title}</h3>
               </div>
             </article>
           ))}
         </div>
-      </section>
-      <section className="lp-cta">
-        <div className="lp-cta-img">
-          <div className="lp-cta-overlay">
-            <span className="lp-cta-tag">Paket Tour</span>
-            <h3>
-              Temukan pilihan destinasi halal dengan akomodasi aman, makanan
-              halal terjamin, dan fasilitas ibadah yang mudah dijangkau.
-            </h3>
-            <button className="lp-btn-white">Temukan Destinasi</button>
-          </div>
-        </div>
-      </section>
-      <section id="artikel" className="lp-section lp-section-soft">
-        <div className="lp-section-head lp-section-head-center">
-          <span className="lp-tag">Artikel Panduan Traveling</span>
-          <h2>Tips dan Artikel Perjalanan</h2>
-        </div>
-        <div className="lp-article-grid">
-          <article className="lp-article-card">
-            <div className="lp-article-img lp-article-img-1" />
-            <div className="lp-article-body">
-              <span className="lp-article-date">01 Des 2025</span>
-              <h3>
-                5 Tips Packing Syar’i: Apa yang Wajib Ada di Koper Muslimah?
-              </h3>
-              <p>
-                Packing yang efisien dan sesuai kebutuhan adalah kunci.
-                Persiapan bukan hanya pakaian...
-              </p>
-            </div>
-          </article>
+      </div>
+    </section>
+  );
+}
 
-          <article className="lp-article-card">
-            <div className="lp-article-img lp-article-img-2" />
-            <div className="lp-article-body">
-              <span className="lp-article-date">25 Nov 2025</span>
-              <h3>
-                Eksplorasi Kota Tua Jakarta: Destinasi Halal-Friendly dan Penuh
-                Sejarah
-              </h3>
-              <p>
-                Wisata sejarah tak harus menguras energi. Kota Tua menawarkan
-                spot yang ramah Muslimah...
-              </p>
-            </div>
-          </article>
-          <article className="lp-article-card">
-            <div className="lp-article-img lp-article-img-3" />
-            <div className="lp-article-body">
-              <span className="lp-article-date">18 Nov 2025</span>
-              <h3>
-                Checklist Aman Sebelum Berangkat: Dari Dokumen hingga Aplikasi
-                Wajib
-              </h3>
-              <p>
-                Pastikan semua dokumen penting dan aplikasi pendukung perjalanan
-                sudah siap sebelum berangkat...
-              </p>
-            </div>
-          </article>
-        </div>
-        <div className="lp-center">
-          <button className="lp-btn-outline">Lihat Selengkapnya</button>
-        </div>
-      </section>
-<section id="testimoni" className="lp-section lp-section-test">
-  <div className="lp-section-head lp-section-head-center">
-    <span className="lp-test-label">Testimoni</span>
-  </div>
+// CTA Section
+function CTASection() {
+  return (
+    <section className="cta-section">
+      <div className="cta-bg">
+        <img src="/src/assets/2.png" alt="CTA Background" />
+        <div className="cta-overlay" />
+      </div>
+      <div className="cta-content">
+        <p className="cta-label">Paket Tour</p>
+        <h2 className="cta-title">
+          Temukan pilihan destinasi halal dengan akomodasi aman, makanan halal terjamin, 
+          dan fasilitas ibadah yang mudah dijangkau.
+        </h2>
+        <Button variant="purple-light" showArrows={false}>
+          Temukan Destinasi
+        </Button>
+      </div>
+    </section>
+  );
+}
 
-  <div className="lp-testimoni">
-    <p className="lp-test-headline">
-      <span className="lp-test-strong">
-        Ini bukan sekadar liburan, ini adalah perjalanan yang berbeda.
-        Setiap detail dirancang khusus
-      </span>{" "}
-      <span className="lp-test-normal">
-        untuk kenyamanan kita, membawa pengalaman yang mendalam dan unik.
-      </span>{" "}
-      <span className="lp-test-fade">
-        Mari segera wujudkan petualangan impian!
-      </span>
-    </p>
-          <div className="lp-test-photos">
-            <div className="lp-test-photo">
-              <img src="/muslimah2.png" alt="Testimoni 1" />
-            </div>
-            <div className="lp-test-photo lp-test-photo-main">
-              <img src="/muslimah1.png" alt="Virly Maryam" />
-            </div>
-            <div className="lp-test-photo">
-              <img src="/muslimah 3.png" alt="Testimoni 3" />
-            </div>
-          </div>
+// Article Card
+function ArticleCard({ date, title, excerpt }: { date: string; title: string; excerpt: string }) {
+  return (
+    <article className="article-card">
+      <div className="article-image">
+        <img src="" alt={title} />
+      </div>
+      <div className="article-content">
+        <p className="article-date">{date}</p>
+        <h3 className="article-title">{title}</h3>
+        <p className="article-excerpt">{excerpt}</p>
+      </div>
+    </article>
+  );
+}
 
-          <div className="lp-test-user">
-            <strong>Virly Maryam</strong>
-            <span>Si Petualang Syar’i</span>
+// Articles Section
+function ArticlesSection() {
+  return (
+    <section className="articles-section">
+      <p className="section-subtitle">Aritkel Panduan Travelling</p>
+      <h2 className="section-title">Tips dan Artikel Perjalanan</h2>
+      <div className="articles-grid">
+        <ArticleCard 
+          date="01 Des 2025"
+          title="5 Tips Packing Syar'i: Apa yang Wajib Ada di Koper Muslimah?"
+          excerpt="Packing yang efisien dan sesuai kebutuhan adalah kunci. Persiapan bukan hanya pakaian..."
+        />
+        <ArticleCard 
+          date="25 Nov 2025"
+          title="Eksplorasi Kota Tua Jakarta: Destinasi Halal-Friendly dan Penuh Sejarah"
+          excerpt="Wisata sejarah tak harus menguras energi. Kota Tua menawarkan spot yang ramah Muslimah..."
+        />
+      </div>
+      <div className="articles-btn-wrapper">
+        <Button variant="purple-light" showArrows={false}>
+          Lihat Selengkapnya
+        </Button>
+      </div>
+    </section>
+  );
+}
+
+function StatsSection() {
+  return (
+    <section className="stats-section">
+      <div className="stats-content">
+        <div className="stats-text">
+          <h2 className="stats-title">Ketenangan dan Kenyamanan Perjalanan Anda, Prioritas Kami</h2>
+          <p className="stats-desc">
+            Setiap paket perjalanan kami dirancang dengan cermat, menjamin kenyamanan dan kesesuaian syariat.
+            Ribuan Muslimah telah membuktikan layanan kami yang berfokus pada pengalaman beribadah yang tenang.
+          </p>
+
+          <div className="stats-cards">
+            <StatCard value="500+" label="Destinasi Halal" />
+            <StatCard value="100K+" label="Muslimah yang Terlayani" />
+            <StatCard value="4.9" label="Rata-rata Rating Kepuasan" />
           </div>
         </div>
-      </section>
-      <footer id="kontak" className="lp-footer">
-        <div className="lp-footer-inner">
-          <div className="lp-footer-col">
-            <h4>Halaman</h4>
-            <a href="#hero">Home</a>
-            <a href="#destinasi">Wishlist</a>
-            <a href="#destinasi">Riwayat</a>
-            <a href="#artikel">Artikel</a>
-            <a href="#testimoni">Komunitas</a>
-          </div>
-          <div className="lp-footer-col">
-            <h4>Tentang Kami</h4>
-            <p>Telepon</p>
-            <p>081765219854</p>
-            <p>Email Support</p>
-            <p>saleema@gmail.com</p>
-          </div>
-          <div className="lp-footer-col">
-            <h4>Kantor Pusat</h4>
-            <p>
-              Jl. H. R. Rasuna Said No. 3, RT 6/RW 2, Kuningan, Karet Kuningan,
-              Kecamatan Setiabudi, Kota Jakarta Selatan, DKI Jakarta 12950
-            </p>
-          </div>
-          <div className="lp-footer-brand">
-            <div className="lp-footer-logo">
-              <div className="lp-footer-logo-circle">
-                <img src="/logo.svg" alt="Saleema" />
-              </div>
-              <div className="lp-footer-brand-text">
-                <span className="lp-footer-brand-title">Saleema</span>
-                <span className="lp-footer-brand-sub">Tour</span>
-              </div>
-            </div>
-            <div className="lp-footer-social">
-              <span>IG</span>
-              <span>FB</span>
-              <span>YT</span>
-            </div>
-          </div>
+
+        <div className="stats-image" aria-hidden="true">
+          {/* gambar optional: hapus atau biarkan kosong jika belum ada */}
         </div>
-        <div className="lp-footer-bottom">
-          ©2025 Saleema, Hak Cipta Dilindungi
+      </div>
+    </section>
+  );
+}
+
+// Testimonial Section
+function TestimonialSection() {
+  return (
+    <section className="testimonial-section">
+      <p className="testimonial-label">Testimoni</p>
+      <div className="testimonial-quote">
+        <p>
+          <span className="text-black">Ini bukan sekadar liburan, ini adalah perjalanan yang berbeda. Setiap detail dirancang khusus </span>
+          <span className="text-gray">untuk kenyamanan kita, membawa pengalaman yang mendalam dan unik.</span>{" "}
+          <span className="text-light-gray">Mari segera wujudkan petualangan impian!</span>
+        </p>
+      </div>
+      <div className="testimonial-photos">
+        <div className="testimonial-photo testimonial-photo-side">
+          <img src="" alt="Testimonial 1" />
         </div>
-      </footer>
+        <div className="testimonial-photo testimonial-photo-main">
+          <img src="" alt="Testimonial Main" />
+        </div>
+        <div className="testimonial-photo testimonial-photo-side">
+          <img src="" alt="Testimonial 2" />
+        </div>
+      </div>
+      <div className="testimonial-author">
+        <h3 className="testimonial-name">Virly Maryam</h3>
+        <p className="testimonial-role">Si Petualang Syar'i</p>
+      </div>
+    </section>
+  );
+}
+
+// Main HomePage Component
+export default function HomePage() {
+  return (
+    <div className="homepage">
+      <Header />
+      
+      <main className="homepage-main">
+        <HeroSection />
+        
+        <div className="search-bg-wrapper">
+          <SearchBar />
+        </div>
+
+        <DestinationsSection />
+        
+        <CTASection />
+        
+        <ArticlesSection />
+        
+        <StatsSection />
+        
+        <TestimonialSection />
+      </main>
     </div>
   );
 }

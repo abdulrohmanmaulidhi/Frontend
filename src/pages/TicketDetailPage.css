@@ -1,0 +1,100 @@
+.ticket-detail-page-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #fff8f0;
+  padding-top: 150px;
+  padding-bottom: 100px;
+}
+
+.ticket-detail-page-container {
+  max-width: 1728px;
+  margin: 0 auto;
+  padding: 0 200px;
+}
+
+.ticket-detail-header-section {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-bottom: 60px;
+}
+
+.ticket-detail-title-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.ticket-detail-page-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 60px;
+  color: #444444;
+  line-height: normal;
+  margin: 0;
+}
+
+.ticket-detail-subtitle-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.ticket-detail-page-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  color: #444444;
+  line-height: normal;
+  margin: 0;
+  max-width: 800px;
+}
+
+.ticket-detail-card-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+@media (max-width: 1024px) {
+  .ticket-detail-page-container {
+    padding: 0 60px;
+  }
+
+  .ticket-detail-page-title {
+    font-size: 48px;
+  }
+
+  .ticket-detail-page-subtitle {
+    font-size: 20px;
+  }
+
+  .ticket-detail-header-section {
+    margin-bottom: 40px;
+  }
+}
+
+@media (max-width: 767px) {
+  .ticket-detail-page-wrapper {
+    padding-top: 120px;
+    padding-bottom: 60px;
+  }
+
+  .ticket-detail-page-container {
+    padding: 0 20px;
+  }
+
+  .ticket-detail-header-section {
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  .ticket-detail-page-title {
+    font-size: 36px;
+  }
+
+  .ticket-detail-page-subtitle {
+    font-size: 16px;
+  }
+}

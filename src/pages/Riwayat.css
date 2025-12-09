@@ -1,0 +1,629 @@
+/* ============================================
+   RIWAYAT BOOKING PAGE - SALEEMA TOUR
+   100% Match dengan Figma Design
+   ============================================ */
+
+/* Page Wrapper */
+.riwayat-page-wrapper {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-color: #f8f6f3;
+  padding-top: 150px;
+  padding-bottom: 100px;
+}
+
+.riwayat-page-container {
+  max-width: 1728px;
+  margin: 0 auto;
+  padding: 0 60px;
+}
+
+/* ============================================
+   HEADER SECTION
+   ============================================ */
+.riwayat-header-section {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  margin-bottom: 60px;
+}
+
+.riwayat-title-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.riwayat-page-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 60px;
+  color: #444444;
+  line-height: normal;
+  margin: 0;
+}
+
+.riwayat-subtitle-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.riwayat-page-subtitle {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  color: #444444;
+  line-height: normal;
+  margin: 0;
+}
+
+/* ============================================
+   TABS SECTION
+   ============================================ */
+.riwayat-tabs-wrapper {
+  background-color: white;
+  border-radius: 20px;
+  box-shadow: 0px 12px 16px -4px rgba(10, 13, 18, 0.08), 0px 4px 6px -2px rgba(10, 13, 18, 0.03);
+  margin-bottom: 80px;
+  width: 100%;
+}
+
+.riwayat-tabs-container {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  padding: 0 17px;
+}
+
+.riwayat-tab-item {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 23px 10px;
+  width: 490px;
+  height: 74px;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.riwayat-tab-item:hover {
+  opacity: 0.95;
+}
+
+.riwayat-tab-item.active {
+  background-color: #b49de4;
+}
+
+.riwayat-tab-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 24px;
+  line-height: normal;
+  text-align: center;
+  margin: 0;
+  flex: 1;
+  color: black;
+}
+
+.riwayat-tab-item.active .riwayat-tab-text {
+  color: white;
+}
+
+/* ============================================
+   CONTENT SECTION
+   ============================================ */
+.riwayat-content-section {
+  display: flex;
+  flex-direction: column;
+  gap: 50px;
+}
+
+.riwayat-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
+
+.riwayat-section-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 40px;
+  color: #444444;
+  line-height: normal;
+  text-align: center;
+  margin: 0;
+  white-space: pre;
+}
+
+/* ============================================
+   BOOKING HEADER WITH DROPDOWN
+   ============================================ */
+.riwayat-booking-header {
+  display: flex;
+  gap: 232px;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.riwayat-booking-title-wrapper {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+}
+
+.riwayat-booking-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  color: #444444;
+  line-height: normal;
+  margin: 0;
+}
+
+.riwayat-month-dropdown-wrapper {
+  display: flex;
+  align-items: center;
+}
+
+.riwayat-month-dropdown {
+  display: flex;
+  gap: 40px;
+  align-items: center;
+  justify-content: flex-end;
+  padding: 10px;
+  background-color: #b49de4;
+  border: none;
+  border-radius: 10px;
+  width: 193px;
+  height: 60px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.riwayat-month-dropdown:hover {
+  background-color: #a388d8;
+  transform: translateY(-2px);
+}
+
+.riwayat-month-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: white;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+.riwayat-dropdown-icon {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  width: 30px;
+  height: 30px;
+}
+
+/* ============================================
+   BOOKING CARDS
+   ============================================ */
+.riwayat-cards-container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.riwayat-booking-card {
+  display: flex;
+  gap: 30px;
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 12px 16px -4px rgba(10, 13, 18, 0.08), 0px 4px 6px -2px rgba(10, 13, 18, 0.03);
+  padding: 20px;
+  transition: all 0.3s ease;
+}
+
+.riwayat-booking-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0px 16px 24px -4px rgba(10, 13, 18, 0.12), 0px 8px 12px -2px rgba(10, 13, 18, 0.06);
+}
+
+/* Card Image */
+.riwayat-card-image-wrapper {
+  width: 262px;
+  height: 254px;
+  border-radius: 10px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.riwayat-card-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.riwayat-card-image-placeholder {
+  width: 100%;
+  height: 100%;
+  background-color: #e5e5e5;
+}
+
+/* Card Content */
+.riwayat-card-content {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+}
+
+/* Title Row with Status */
+.riwayat-card-title-row {
+  display: flex;
+  gap: 280px;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.riwayat-card-title {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 30px;
+  color: #444444;
+  line-height: normal;
+  margin: 0;
+}
+
+.riwayat-status-badge {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px;
+}
+
+.riwayat-status-icon {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+}
+
+.riwayat-status-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 20px;
+  color: #444444;
+  line-height: normal;
+  white-space: nowrap;
+}
+
+/* Info Grid */
+.riwayat-card-info-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.riwayat-info-row {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 0;
+}
+
+.riwayat-info-icon {
+  width: 24px;
+  height: 24px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.riwayat-info-content {
+  display: flex;
+  align-items: center;
+  padding: 0 10px;
+  min-width: 200px;
+}
+
+.riwayat-info-content-wide {
+  flex: 1;
+}
+
+.riwayat-info-text {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 20px;
+  color: #444444;
+  line-height: normal;
+  margin: 0;
+}
+
+/* Button Wrapper */
+.riwayat-card-button-wrapper {
+  display: flex;
+  align-items: center;
+  padding-top: 10px;
+  margin-top: auto;
+}
+
+.riwayat-detail-button {
+  width: 100% !important;
+  height: 60px !important;
+  border-radius: 10px !important;
+  background-color: #ffb4c4 !important;
+  min-width: 0 !important;
+  padding: 10px 20px !important;
+}
+
+.riwayat-detail-button:hover {
+  background-color: #ff9eb4 !important;
+}
+
+.riwayat-detail-button span {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: white;
+}
+
+.riwayat-review-button {
+  width: 100% !important;
+  height: 60px !important;
+  border-radius: 10px !important;
+  background-color: #5bbdc5 !important;
+  min-width: 0 !important;
+  padding: 10px 20px !important;
+}
+
+.riwayat-review-button:hover {
+  background-color: #4aafb7 !important;
+}
+
+.riwayat-review-button span {
+  font-family: 'Inter', sans-serif;
+  font-weight: 600;
+  font-size: 24px;
+  color: white;
+}
+
+/* ============================================
+   RESPONSIVE - TABLET (768px - 1024px)
+   ============================================ */
+@media (max-width: 1024px) {
+  .riwayat-page-container {
+    padding: 0 40px;
+  }
+
+  .riwayat-page-title {
+    font-size: 48px;
+  }
+
+  .riwayat-page-subtitle {
+    font-size: 20px;
+  }
+
+  .riwayat-tabs-container {
+    gap: 20px;
+  }
+
+  .riwayat-tab-item {
+    width: 100%;
+    max-width: 490px;
+  }
+
+  .riwayat-tab-text {
+    font-size: 20px;
+  }
+
+  .riwayat-section-title {
+    font-size: 32px;
+  }
+
+  .riwayat-booking-header {
+    gap: 100px;
+  }
+
+  .riwayat-booking-title {
+    font-size: 26px;
+  }
+
+  .riwayat-booking-card {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .riwayat-card-image-wrapper {
+    width: 100%;
+    height: 250px;
+  }
+
+  .riwayat-card-title-row {
+    gap: 50px;
+  }
+
+  .riwayat-card-title {
+    font-size: 26px;
+  }
+
+  .riwayat-status-text {
+    font-size: 18px;
+  }
+
+  .riwayat-info-text {
+    font-size: 18px;
+  }
+
+  .riwayat-detail-button span {
+    font-size: 20px;
+  }
+
+  .riwayat-review-button span {
+    font-size: 20px;
+  }
+}
+
+/* ============================================
+   RESPONSIVE - MOBILE (< 768px)
+   ============================================ */
+@media (max-width: 767px) {
+  .riwayat-page-wrapper {
+    padding-top: 120px;
+    padding-bottom: 60px;
+  }
+
+  .riwayat-page-container {
+    padding: 0 20px;
+  }
+
+  .riwayat-header-section {
+    margin-bottom: 40px;
+    gap: 10px;
+  }
+
+  .riwayat-page-title {
+    font-size: 36px;
+  }
+
+  .riwayat-page-subtitle {
+    font-size: 16px;
+  }
+
+  .riwayat-tabs-wrapper {
+    margin-bottom: 50px;
+  }
+
+  .riwayat-tabs-container {
+    flex-direction: column;
+    gap: 20px;
+    padding: 17px;
+  }
+
+  .riwayat-tab-item {
+    width: 100%;
+    height: 60px;
+  }
+
+  .riwayat-tab-text {
+    font-size: 18px;
+  }
+
+  .riwayat-content-section {
+    gap: 30px;
+  }
+
+  .riwayat-section-title {
+    font-size: 28px;
+  }
+
+  .riwayat-booking-header {
+    flex-direction: column;
+    gap: 20px;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+
+  .riwayat-booking-title {
+    font-size: 24px;
+  }
+
+  .riwayat-month-dropdown {
+    width: 170px;
+    height: 55px;
+    gap: 30px;
+  }
+
+  .riwayat-month-text {
+    font-size: 18px;
+  }
+
+  .riwayat-cards-container {
+    gap: 30px;
+  }
+
+  .riwayat-booking-card {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
+  }
+
+  .riwayat-card-image-wrapper {
+    width: 100%;
+    height: 200px;
+  }
+
+  .riwayat-card-content {
+    gap: 12px;
+  }
+
+  .riwayat-card-title-row {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+
+  .riwayat-card-title {
+    font-size: 22px;
+  }
+
+  .riwayat-status-badge {
+    padding: 5px 0;
+  }
+
+  .riwayat-status-icon {
+    width: 24px;
+    height: 24px;
+  }
+
+  .riwayat-status-text {
+    font-size: 16px;
+  }
+
+  .riwayat-info-row {
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 8px 0;
+  }
+
+  .riwayat-info-icon {
+    width: 20px;
+    height: 20px;
+  }
+
+  .riwayat-info-content {
+    min-width: auto;
+    padding: 0 5px;
+  }
+
+  .riwayat-info-content-wide {
+    width: 100%;
+    flex-basis: 100%;
+  }
+
+  .riwayat-info-text {
+    font-size: 16px;
+  }
+
+  .riwayat-card-button-wrapper {
+    padding-top: 5px;
+  }
+
+  .riwayat-detail-button {
+    height: 55px !important;
+  }
+
+  .riwayat-detail-button span {
+    font-size: 18px;
+  }
+
+  .riwayat-review-button {
+    height: 55px !important;
+  }
+
+  .riwayat-review-button span {
+    font-size: 18px;
+  }
+}

@@ -114,6 +114,7 @@
 
 .auth-form-card {
   background: #ffffff;
+  border:4px solid #ffdce4;
   border-radius: 20px;
   padding: 32px 40px 32px;
   flex: 1;

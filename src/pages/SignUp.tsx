@@ -1,7 +1,7 @@
 // src/pages/SignUp.tsx
+import './SignUp.css';
 import { FormEvent, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './SignUp.css';
 import { register as registerApi } from '../api/auth'; // axios helper
 import Input from '../components/Input';
 import Button from '../components/Button';
@@ -90,7 +90,7 @@ export default function SignUp() {
     <div className="auth-root">
       <div className="auth-card">
         <div className="auth-hero">
-          <div className="auth-hero-inner">
+          <div className="auth-hero-inner-register">
             <div className="auth-hero-brand">
               <div className="auth-hero-logo">
                 <Link to="/">

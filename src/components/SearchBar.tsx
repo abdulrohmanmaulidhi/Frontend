@@ -71,7 +71,7 @@ export default function SearchBar({
       return (
         <div className="search-dropdown-menu empty" role="listbox">
           <div className="search-dropdown-option" aria-disabled>
-            {loading ? 'Memuat data...' : 'Belum ada data'}
+            {loading ? 'Memuat data...' : '-'}
           </div>
         </div>
       );

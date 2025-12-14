@@ -1,57 +1,160 @@
-import React, { useEffect, useRef, useState } from "react";
-import "./Profile.css";
+import React, { useEffect, useRef, useState } from 'react';
+import './Profile.css';
+import Button from '../components/Button';
+import Input from '../components/Input';
+import {
+  EmailIcon,
+  IconPlaceholderProfileIcon,
+  ProfileIcon,
+  TelephoneIcon,
+} from '../assets/icon';
+import { getProfile, User } from '../api/auth';
+import api from '../api/axios';
+import { apiRoutes } from '../api/routes';
+import { uploadAvatar } from '../api/users';
 
-type ProfileData = {
-  name: string;
+interface UserProfile {
+  fullname: string;
   email: string;
   phone: string;
-  password: string;
-  avatar: string;
-};
-
-const STORAGE_KEY = "profile_user";
-
-const loadProfile = (): ProfileData => {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (raw) return JSON.parse(raw) as ProfileData;
-  } catch (err) {
-    console.error("Failed to load user profile", err);
-  }
-  return { name: "", email: "", phone: "", password: "", avatar: "" };
-};
+  avatar_url: string;
+}
 
 export default function Profile() {
-  const [name, setName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [password, setPassword] = useState("");
-  const [avatar, setAvatar] = useState<string>("");
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [password, setPassword] = useState('');
+  const [avatar, setAvatar] = useState<string>('');
   const [success, setSuccess] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [uploading, setUploading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
   useEffect(() => {
-    const data = loadProfile();
-    setName(data.name);
-    setEmail(data.email);
-    setPhone(data.phone);
-    setPassword(data.password);
-    setAvatar(data.avatar);
+    const fetchProfile = async () => {
+      try {
+        setLoading(true);
+        const userData = await getProfile();
+        setName(userData.fullname);
+        setEmail(userData.email);
+        setPhone(userData.phone);
+        setAvatar(userData.avatar_url || '');
+      } catch (error) {
+        console.error('Gagal mengambil data profil:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProfile();
   }, []);
 
-  const handleSave = () => {
-    const payload: ProfileData = { name, email, phone, password, avatar };
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
-    localStorage.setItem("user", JSON.stringify({ fullname: name, email, role: "user", avatar_url: avatar }));
-    setSuccess(true);
+  const handleSave = async () => {
+    try {
+      const payload = {
+        nama: name,
+        email: email,
+        noTelepon: phone,
+        ...(password && { password }), // hanya kirim password jika ada
+      };
+
+      await api.put(apiRoutes.profile, payload);
+
+      // Perbarui data di localStorage
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      userData.fullname = name;
+      userData.email = email;
+      if (avatar) userData.avatar_url = avatar;
+      localStorage.setItem('user', JSON.stringify(userData));
+
+      setSuccess(true);
+    } catch (error) {
+      console.error('Gagal menyimpan profil:', error);
+      alert('Gagal menyimpan perubahan profil. Silakan coba lagi.');
+    }
   };
+
+  const uploadAvatarImage = async (file: File) => {
+    try {
+      setUploading(true);
+
+      const response = await uploadAvatar(file);
+
+      // Ambil URL avatar baru dari response
+      const avatarUrl = response.data?.avatarUrl;
+      setAvatar(avatarUrl);
+
+      // Update juga di localStorage
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      userData.avatar_url = avatarUrl;
+      localStorage.setItem('user', JSON.stringify(userData));
+    } catch (error) {
+      console.error('Gagal mengunggah avatar:', error);
+      alert('Gagal mengunggah avatar. Silakan coba lagi.');
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const deleteAvatar = async () => {
+    try {
+      await api.delete(apiRoutes.deleteAvatar);
+      setAvatar('');
+
+      // Update juga di localStorage
+      const userData = JSON.parse(localStorage.getItem('user') || '{}');
+      userData.avatar_url = '';
+      localStorage.setItem('user', JSON.stringify(userData));
+    } catch (error) {
+      console.error('Gagal menghapus avatar:', error);
+      alert('Gagal menghapus avatar. Silakan coba lagi.');
+    }
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      // Validasi tipe file
+      if (!file.type.match('image.*')) {
+        alert('Silakan pilih file gambar');
+        return;
+      }
+
+      // Validasi ukuran file (maksimal 5MB)
+      if (file.size > 5 * 1024 * 1024) {
+        alert('File terlalu besar. Maksimal 5MB.');
+        return;
+      }
+
+      uploadAvatarImage(file);
+    }
+  };
+
+  if (loading) {
+    return (
+      <div className="profile-page user-profile-page">
+        <div className="loading-container">
+          <p>Loading profile...</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="profile-page user-profile-page">
       <header className="profile-hero">
         <div>
           <h1>Edit Profil</h1>
-          <p>Lengkapi dan perbarui data diri anda untuk pengalaman yang lebih maksimal.</p>
+          <p>
+            Lengkapi dan perbarui data diri anda untuk pengalaman yang lebih
+            maksimal.
+          </p>
         </div>
       </header>
 
@@ -59,28 +162,56 @@ export default function Profile() {
         <div className="profile-card-head">Informasi Profil</div>
 
         <div className="profile-avatar-row">
-          <div className="profile-avatar" onClick={() => fileInputRef.current?.click()}>
-            {avatar ? <img src={avatar} alt="Avatar" /> : <span className="profile-avatar-placeholder">📷</span>}
+          <div
+            className="profile-avatar"
+            onClick={() => !uploading && fileInputRef.current?.click()}
+          >
+            {avatar ? (
+              <img src={avatar} alt="Avatar" />
+            ) : (
+              <span className="profile-avatar-placeholder">
+                <img
+                  src={IconPlaceholderProfileIcon}
+                  style={{
+                    background: '#FFB4C4',
+                    borderRadius: '5px',
+                    width: '2.5rem',
+                    height: '2.5rem',
+                    padding: '0.5rem',
+                  }}
+                  alt="profile"
+                />
+              </span>
+            )}
           </div>
           <div className="profile-avatar-actions">
-            <button type="button" className="profile-btn primary" onClick={() => fileInputRef.current?.click()}>
-              Unggah Foto Profil
-            </button>
-            <button type="button" className="profile-btn danger" onClick={() => setAvatar("")}>
-              Hapus
-            </button>
+            <Button
+              type="button"
+              variant="teal-light"
+              onClick={() => fileInputRef.current?.click()}
+              style={{ fontSize: '15px' }}
+              disabled={uploading}
+            >
+              {uploading ? 'Mengunggah...' : 'Unggah Foto Profil'}
+            </Button>
+            {avatar && (
+              <Button
+                type="button"
+                variant="pink-danger"
+                onClick={deleteAvatar}
+                style={{ fontSize: '15px' }}
+                disabled={uploading}
+              >
+                {uploading ? 'Menghapus...' : 'Hapus'}
+              </Button>
+            )}
             <input
               ref={fileInputRef}
               type="file"
               accept="image/*"
-              style={{ display: "none" }}
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  const url = URL.createObjectURL(file);
-                  setAvatar(url);
-                }
-              }}
+              style={{ display: 'none' }}
+              onChange={handleFileChange}
+              disabled={uploading}
             />
           </div>
         </div>
@@ -92,29 +223,66 @@ export default function Profile() {
         <div className="profile-grid">
           <label className="profile-field">
             <span>Nama</span>
-            <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Masukkan nama lengkap" />
+            <Input
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              placeholder="Masukkan nama lengkap"
+              icon={ProfileIcon}
+            />
           </label>
           <label className="profile-field">
             <span>Email</span>
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Masukkan email" />
+            <Input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Masukkan email"
+              icon={EmailIcon}
+            />
           </label>
           <label className="profile-field">
             <span>No Telepon</span>
-            <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="Masukkan nomor telepon" />
+            <Input
+              type="tel"
+              value={phone}
+              onChange={(e) => setPhone(e.target.value)}
+              placeholder="Masukkan nomor telepon"
+              icon={TelephoneIcon}
+            />
           </label>
           <label className="profile-field">
             <span>Password</span>
-            <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Masukkan password" />
+            <Input
+              type={showPassword ? 'text' : 'password'}
+              placeholder="Masukkan password..."
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+              showPasswordToggle
+              onPasswordToggle={togglePasswordVisibility}
+              isPasswordVisible={showPassword}
+            />
           </label>
         </div>
 
         <div className="profile-actions">
-          <button type="button" className="profile-btn danger" onClick={() => window.history.back()}>
+          <Button
+            type="button"
+            variant="pink-danger"
+            onClick={() => window.history.back()}
+            style={{ fontSize: '15px' }}
+          >
             Batalkan Perubahan
-          </button>
-          <button type="button" className="profile-btn primary" onClick={handleSave}>
+          </Button>
+          <Button
+            type="button"
+            variant="teal-light"
+            onClick={handleSave}
+            style={{ fontSize: '15px' }}
+          >
             Simpan Perubahan
-          </button>
+          </Button>
         </div>
       </section>
 
@@ -123,7 +291,11 @@ export default function Profile() {
           <div className="profile-modal-card">
             <div className="profile-modal-icon">✓</div>
             <h3>Perubahan Berhasil Disimpan</h3>
-            <button type="button" className="profile-btn primary" onClick={() => setSuccess(false)}>
+            <button
+              type="button"
+              className="profile-btn primary"
+              onClick={() => setSuccess(false)}
+            >
               Selanjutnya
             </button>
           </div>

@@ -1,17 +1,24 @@
-import React, { ButtonHTMLAttributes } from "react";
-import arrowIcon from "../assets/icon/arrow.png";
-import "./Button.css";
+import React, { ButtonHTMLAttributes } from 'react';
+import arrowIcon from '../assets/icon/arrow.png';
+import './Button.css';
 
 interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "ghost" | "purple-light" | "pink-light" | "teal-light" | "teal-medium";
+  variant?:
+    | 'primary'
+    | 'ghost'
+    | 'purple-light'
+    | 'pink-light'
+    | 'teal-light'
+    | 'teal-medium'
+    | 'pink-danger';
   className?: string;
   showArrows?: boolean;
 }
 
 export default function Button({
   children,
-  variant = "primary",
-  className = "",
+  variant = 'primary',
+  className = '',
   showArrows = false,
   ...rest
 }: Props) {

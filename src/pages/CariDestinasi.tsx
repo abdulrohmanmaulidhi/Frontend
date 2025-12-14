@@ -1,19 +1,20 @@
-import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
-import type { Destination } from "../api/destinations";
-import { fetchDestinations } from "../api/destinations";
-import searchIcon from "../assets/icon/search.png";
-import mapPinIcon from "../assets/icon/map-pin.png";
-import planeIcon from "../assets/icon/plane.png";
-import calendarIcon from "../assets/icon/calendar.png";
-import "./CariDestinasi.css";
+import { useEffect, useMemo, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import type { Destination } from '../api/destinations';
+import { fetchDestinations } from '../api/destinations';
+import searchIcon from '../assets/icon/search.png';
+import mapPinIcon from '../assets/icon/map-pin.png';
+import planeIcon from '../assets/icon/plane.png';
+import calendarIcon from '../assets/icon/calendar.png';
+import './CariDestinasi.css';
 
-const formatCurrency = (value?: number) => (value ? `Rp${value.toLocaleString("id-ID")}` : "");
+const formatCurrency = (value?: number) =>
+  value ? `Rp${value.toLocaleString('id-ID')}` : '';
 
 const formatPeriod = (period?: string[]) => {
-  if (!period || period.length === 0) return "";
+  if (!period || period.length === 0) return '';
   const parse = (value: string) => {
-    const parts = value.split(" ");
+    const parts = value.split(' ');
     const month = parts[1];
     const year = parts[2];
     return { month, year };
@@ -21,17 +22,28 @@ const formatPeriod = (period?: string[]) => {
   const first = parse(period[0]);
   const last = parse(period[period.length - 1]);
   if (first.month && last.month) {
-    if (first.year === last.year) return `${first.month} - ${last.month} ${first.year}`;
+    if (first.year === last.year)
+      return `${first.month} - ${last.month} ${first.year}`;
     return `${first.month} ${first.year} - ${last.month} ${last.year}`;
   }
-  return period.join(", ");
+  return period.join(', ');
 };
 
-function DestinationCard({ dest, onDetails }: { dest: Destination; onDetails: () => void }) {
+function DestinationCard({
+  dest,
+  onDetails,
+}: {
+  dest: Destination;
+  onDetails: () => void;
+}) {
   return (
     <article className="cd-card" role="listitem">
       <div className="cd-card-media">
-        {dest.image ? <img src={dest.image} alt={dest.title} loading="lazy" /> : <div className="cd-image-placeholder" />}
+        {dest.image ? (
+          <img src={dest.image} alt={dest.title} loading="lazy" />
+        ) : (
+          <div className="cd-image-placeholder" />
+        )}
       </div>
       <div className="cd-card-body">
         <div className="cd-card-title">{dest.title}</div>
@@ -71,20 +83,22 @@ function DestinationCard({ dest, onDetails }: { dest: Destination; onDetails: ()
 export default function CariDestinasi() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-  const [query, setQuery] = useState(searchParams.get("q") ?? searchParams.get("to") ?? "");
-  const [fromFilter, setFromFilter] = useState(searchParams.get("from") ?? "");
-  const [dateFilter, setDateFilter] = useState(searchParams.get("date") ?? "");
+  const [query, setQuery] = useState(
+    searchParams.get('q') ?? searchParams.get('to') ?? ''
+  );
+  const [fromFilter, setFromFilter] = useState(searchParams.get('from') ?? '');
+  const [dateFilter, setDateFilter] = useState(searchParams.get('date') ?? '');
   const [destinations, setDestinations] = useState<Destination[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    document.title = "Cari Destinasi | Saleema Tour";
+    document.title = 'Cari Destinasi | Saleema Tour';
   }, []);
 
   useEffect(() => {
-    const incomingQ = searchParams.get("q") ?? searchParams.get("to") ?? "";
-    const incomingFrom = searchParams.get("from") ?? "";
-    const incomingDate = searchParams.get("date") ?? "";
+    const incomingQ = searchParams.get('q') ?? searchParams.get('to') ?? '';
+    const incomingFrom = searchParams.get('from') ?? '';
+    const incomingDate = searchParams.get('date') ?? '';
     setQuery((prev) => (prev === incomingQ ? prev : incomingQ));
     setFromFilter((prev) => (prev === incomingFrom ? prev : incomingFrom));
     setDateFilter((prev) => (prev === incomingDate ? prev : incomingDate));
@@ -109,10 +123,10 @@ export default function CariDestinasi() {
     setQuery(value);
     const next = new URLSearchParams(searchParams);
     if (value.trim()) {
-      next.set("q", value);
+      next.set('q', value);
     } else {
-      next.delete("q");
-      next.delete("to");
+      next.delete('q');
+      next.delete('to');
     }
     setSearchParams(next);
   };
@@ -122,9 +136,15 @@ export default function CariDestinasi() {
     const from = fromFilter.trim().toLowerCase();
     const date = dateFilter.trim().toLowerCase();
     return destinations.filter((dest) => {
-      const base = [dest.title, dest.location, dest.airline].filter(Boolean).join(" ").toLowerCase();
-      const fromText = `${dest.airport || ""} ${dest.location || ""}`.toLowerCase();
-      const dateMatch = (dest.period ?? []).some((p) => p.toLowerCase().includes(date));
+      const base = [dest.title, dest.location, dest.airline]
+        .filter(Boolean)
+        .join(' ')
+        .toLowerCase();
+      const fromText =
+        `${dest.airport || ''} ${dest.location || ''}`.toLowerCase();
+      const dateMatch = (dest.period ?? []).some((p) =>
+        p.toLowerCase().includes(date)
+      );
       const matchQ = q ? base.includes(q) : true;
       const matchFrom = from ? fromText.includes(from) : true;
       const matchDate = date ? dateMatch : true;
@@ -141,8 +161,9 @@ export default function CariDestinasi() {
         <div className="cd-hero-inner">
           <h1>Cari Destinasi</h1>
           <p>
-            Jelajahi setiap sudut dunia dan temukan destinasi impian anda untuk memberikan pengalaman
-            perjalanan yang aman dan sesuai dengan kebutuhan Muslimah.
+            Jelajahi setiap sudut dunia dan temukan destinasi impian anda untuk
+            memberikan pengalaman perjalanan yang aman dan sesuai dengan
+            kebutuhan Muslimah.
           </p>
           <div className="cd-search">
             <img src={searchIcon} alt="" aria-hidden="true" />
@@ -170,7 +191,9 @@ export default function CariDestinasi() {
                 <DestinationCard
                   key={dest.id}
                   dest={dest}
-                  onDetails={() => navigate(`/destinasi/${dest.id}`, { state: { dest } })}
+                  onDetails={() =>
+                    navigate(`/destinasi/${dest.id}`, { state: { dest } })
+                  }
                 />
               ))
             )}
@@ -185,7 +208,9 @@ export default function CariDestinasi() {
                 <DestinationCard
                   key={dest.id}
                   dest={dest}
-                  onDetails={() => navigate(`/destinasi/${dest.id}`, { state: { dest } })}
+                  onDetails={() =>
+                    navigate(`/destinasi/${dest.id}`, { state: { dest } })
+                  }
                 />
               ))}
             </div>

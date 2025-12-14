@@ -10,13 +10,36 @@ export interface ArticleBlock {
 }
 
 export interface Article {
-  id: string | number;
+  id: string; // UUID from backend
   title: string;
+  slug?: string;
+  category?: string;
+  categoryId?: string;
+  content?: string;
+  excerpt?: string;
+  coverImage?: string; // Corresponds to cover_image_url from backend
+  tags?: any[]; // JSONB type from backend
+  authorId?: string;
+  views?: number;
+  readTime?: string; // read_time from backend
+  isPublished?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  publishedAt?: string;
+
+  // Fields for compatibility with API responses
+  judul?: string; // Title field from API response
+  tanggal?: string; // Formatted date from API response
+  tanggalTerbit?: string; // Formatted publish date from admin API
+  imageUrl?: string; // Image URL from API response
+  preview?: string; // Preview/excerpt from API response
+  sections?: any[]; // Sections from detailed article API
+
+  // Legacy fields (might be used elsewhere in frontend)
   displayDate?: string;
   date?: string;
   time?: string;
   status?: ArticleStatus;
-  content?: string;
   image?: string;
   gallery?: string[];
   link?: string;
@@ -47,7 +70,11 @@ const normalizeArticle = (raw: any): Article => {
     value: b.value,
     label: b.label,
   }));
+  const tags = toArray<any>(raw?.tags);
+  const sections = toArray<any>(raw?.sections);
+
   const date = raw?.date ?? raw?.published_at ?? raw?.createdAt ?? "";
+  const publishedAt = raw?.publishedAt ?? raw?.published_at;
 
   const id =
     raw?.id ??
@@ -56,12 +83,35 @@ const normalizeArticle = (raw: any): Article => {
 
   return {
     id,
-    title: raw?.title ?? raw?.name ?? "Artikel Tanpa Judul",
+    title: raw?.title ?? raw?.judul ?? raw?.name ?? "Artikel Tanpa Judul",
+    slug: raw?.slug,
+    category: raw?.category,
+    categoryId: raw?.category_id,
+    content: raw?.content ?? raw?.body ?? "",
+    excerpt: raw?.excerpt ?? raw?.preview,
+    coverImage: raw?.coverImage ?? raw?.cover_image_url ?? raw?.imageUrl,
+    tags,
+    authorId: raw?.author_id,
+    views: raw?.views ? Number(raw.views) : 0,
+    readTime: raw?.read_time,
+    isPublished: raw?.is_published ?? raw?.status === 'Selesai',
+    createdAt: raw?.created_at ?? raw?.createdAt,
+    updatedAt: raw?.updated_at ?? raw?.updatedAt,
+    publishedAt,
+
+    // API response fields
+    judul: raw?.judul,
+    tanggal: raw?.tanggal,
+    tanggalTerbit: raw?.tanggalTerbit,
+    imageUrl: raw?.imageUrl,
+    preview: raw?.preview,
+    sections,
+
+    // Legacy fields for backward compatibility
     displayDate: raw?.displayDate ?? formatDisplayDate(date),
     date,
     time: raw?.time ?? raw?.published_time ?? "",
     status: raw?.status ?? raw?.state ?? "Draft",
-    content: raw?.content ?? raw?.body ?? "",
     image: raw?.image ?? raw?.thumbnail ?? raw?.cover ?? gallery[0],
     gallery,
     link: raw?.link ?? raw?.url ?? "",
@@ -76,11 +126,24 @@ const unwrapData = <T>(payload: any): T => {
   return payload as T;
 };
 
+// Menangani respons paginasi dari backend
+const handlePaginatedResponse = <T>(response: any): T[] => {
+  const data = unwrapData<any>(response);
+  if (data.results && Array.isArray(data.results)) {
+    return data.results;
+  } else if (data.data && Array.isArray(data.data)) {
+    return data.data;
+  } else if (Array.isArray(data)) {
+    return data;
+  }
+  return [];
+};
+
 export async function fetchArticles(): Promise<Article[]> {
   try {
     const res = await api.get(apiRoutes.articles);
-    const list = unwrapData<any[]>(res.data);
-    return Array.isArray(list) ? list.map(normalizeArticle) : [];
+    const articles = handlePaginatedResponse<Article>(res.data);
+    return Array.isArray(articles) ? articles.map(normalizeArticle) : [];
   } catch (error) {
     console.error("Gagal memuat artikel", error);
     return [];
@@ -91,29 +154,137 @@ export async function fetchArticle(id: string | number): Promise<Article | null>
   try {
     const res = await api.get(apiRoutes.article(id));
     const payload = unwrapData<any>(res.data);
-    return payload ? normalizeArticle(payload) : null;
+
+    // Handle different response structures from backend
+    if (payload?.results) {
+      return normalizeArticle(payload.results);
+    } else if (payload?.data) {
+      return normalizeArticle(payload.data);
+    } else {
+      return payload ? normalizeArticle(payload) : null;
+    }
   } catch (error) {
     console.error("Gagal memuat artikel", error);
     return null;
   }
 }
 
-export async function createArticle(payload: ArticlePayload): Promise<Article | null> {
+export async function createArticle(payload: ArticlePayload, coverImageFile?: File): Promise<Article | null> {
   try {
-    const res = await api.post(apiRoutes.articles, payload);
+    let res;
+
+    if (coverImageFile) {
+      // Jika ada file gambar, gunakan multipart/form-data
+      const formData = new FormData();
+
+      // Tambahkan field yang dibutuhkan backend
+      if (payload.title) formData.append('judul', payload.title);
+      if (payload.content) formData.append('content', payload.content);
+      if (payload.publishedAt) formData.append('tanggal', payload.publishedAt);
+
+      // Tambahkan file cover image
+      formData.append('cover_image', coverImageFile);
+
+      // Tambahkan field lainnya jika ada
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value !== undefined && !['title', 'content', 'publishedAt'].includes(key)) {
+          formData.append(key, value as string | Blob);
+        }
+      });
+
+      res = await api.post(apiRoutes.articles, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    } else {
+      // Jika tidak ada file, kirim sebagai JSON biasa
+      const backendPayload = {
+        judul: payload.title,
+        content: payload.content,
+        tanggal: payload.publishedAt || payload.createdAt,
+        ...payload
+      };
+
+      // Pastikan field title diganti ke judul sesuai yang diharapkan backend
+      if (payload.title && !backendPayload.judul) {
+        backendPayload.judul = payload.title;
+      }
+
+      res = await api.post(apiRoutes.articles, backendPayload);
+    }
+
     const data = unwrapData<any>(res.data);
-    return data ? normalizeArticle(data) : null;
+
+    // Handle different response structures
+    if (data?.results) {
+      return normalizeArticle(data.results);
+    } else if (data?.data) {
+      return normalizeArticle(data.data);
+    } else {
+      return data ? normalizeArticle(data) : null;
+    }
   } catch (error) {
     console.error("Gagal membuat artikel", error);
     throw error;
   }
 }
 
-export async function updateArticle(id: string | number, payload: ArticlePayload): Promise<Article | null> {
+export async function updateArticle(id: string | number, payload: ArticlePayload, coverImageFile?: File): Promise<Article | null> {
   try {
-    const res = await api.put(apiRoutes.article(id), payload);
+    let res;
+
+    if (coverImageFile) {
+      // Jika ada file gambar, gunakan multipart/form-data
+      const formData = new FormData();
+
+      // Tambahkan field yang dibutuhkan backend
+      if (payload.title) formData.append('judul', payload.title);
+      if (payload.content) formData.append('content', payload.content);
+      if (payload.publishedAt) formData.append('tanggal', payload.publishedAt);
+
+      // Tambahkan file cover image
+      formData.append('cover_image', coverImageFile);
+
+      // Tambahkan field lainnya jika ada
+      Object.entries(payload).forEach(([key, value]) => {
+        if (value !== undefined && !['title', 'content', 'publishedAt'].includes(key)) {
+          formData.append(key, value as string | Blob);
+        }
+      });
+
+      res = await api.put(apiRoutes.article(id), formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+    } else {
+      // Jika tidak ada file, kirim sebagai JSON biasa
+      const backendPayload = {
+        judul: payload.title,
+        content: payload.content,
+        tanggal: payload.publishedAt,
+        ...payload
+      };
+
+      // Pastikan field title diganti ke judul sesuai yang diharapkan backend
+      if (payload.title && !backendPayload.judul) {
+        backendPayload.judul = payload.title;
+      }
+
+      res = await api.put(apiRoutes.article(id), backendPayload);
+    }
+
     const data = unwrapData<any>(res.data);
-    return data ? normalizeArticle(data) : null;
+
+    // Handle different response structures
+    if (data?.results) {
+      return normalizeArticle(data.results);
+    } else if (data?.data) {
+      return normalizeArticle(data.data);
+    } else {
+      return data ? normalizeArticle(data) : null;
+    }
   } catch (error) {
     console.error("Gagal memperbarui artikel", error);
     throw error;
@@ -127,5 +298,24 @@ export async function deleteArticle(id: string | number): Promise<boolean> {
   } catch (error) {
     console.error("Gagal menghapus artikel", error);
     return false;
+  }
+}
+
+export async function toggleArticlePublish(id: string | number): Promise<Article | null> {
+  try {
+    const res = await api.patch(`${apiRoutes.article(id)}/publish`);
+    const data = unwrapData<any>(res.data);
+
+    // Handle different response structures
+    if (data?.results) {
+      return normalizeArticle(data.results);
+    } else if (data?.data) {
+      return normalizeArticle(data.data);
+    } else {
+      return data ? normalizeArticle(data) : null;
+    }
+  } catch (error) {
+    console.error("Gagal mengganti status publikasi artikel", error);
+    throw error;
   }
 }

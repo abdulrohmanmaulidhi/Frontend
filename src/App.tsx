@@ -1,36 +1,42 @@
 // src/App.tsx
-import "./components/Footer.css";
-import React, { Suspense, lazy } from "react";
-import { BrowserRouter, Routes, Route, useLocation, Navigate } from "react-router-dom";
-import Header from "./components/Header";
-import Footer from "./components/Footer";
+import './components/Footer.css';
+import React, { Suspense, lazy } from 'react';
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  useLocation,
+  Navigate,
+} from 'react-router-dom';
+import Header from './components/Header';
+import Footer from './components/Footer';
 
-const Home = lazy(() => import("./pages/Home"));
-const Wishlist = lazy(() => import("./pages/Wishlist"));
-const Riwayat = lazy(() => import("./pages/Riwayat"));
-const Artikel = lazy(() => import("./pages/Artikel"));
-const ArtikelDetail = lazy(() => import("./pages/ArtikelDetail"));
-const Komunitas = lazy(() => import("./pages/Komunitas"));
-const Login = lazy(() => import("./pages/Login"));
-const AdminLogin = lazy(() => import("./pages/AdminLogin"));
-const SignUp = lazy(() => import("./pages/SignUp"));
-const DestinationPage = lazy(() => import("./pages/DestinationPage"));
-const ReviewDestinasi = lazy(() => import("./pages/ReviewDestinasi"));
-const UnduhPage = lazy(() => import("./pages/Unduh"));
-const CariDestinasi = lazy(() => import("./pages/CariDestinasi"));
-const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
-const PaymentSummary = lazy(() => import("./pages/PaymentSummary"));
-const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
-const AdminUsers = lazy(() => import("./pages/AdminUsers"));
-const AdminUserEdit = lazy(() => import("./pages/AdminUserEdit"));
-const AdminPackages = lazy(() => import("./pages/AdminPackages"));
-const AdminPackageDetail = lazy(() => import("./pages/AdminPackageDetail"));
-const AdminArticles = lazy(() => import("./pages/AdminArticles"));
-const AdminArticleForm = lazy(() => import("./pages/AdminArticleForm"));
-const AdminOrders = lazy(() => import("./pages/AdminOrders"));
-const AdminCommunity = lazy(() => import("./pages/AdminCommunity"));
-const Profile = lazy(() => import("./pages/Profile"));
-const AdminProfile = lazy(() => import("./pages/AdminProfile"));
+const Home = lazy(() => import('./pages/Home'));
+const Wishlist = lazy(() => import('./pages/Wishlist'));
+const Riwayat = lazy(() => import('./pages/Riwayat'));
+const Artikel = lazy(() => import('./pages/Artikel'));
+const ArtikelDetail = lazy(() => import('./pages/ArtikelDetail'));
+const Komunitas = lazy(() => import('./pages/Komunitas'));
+const Login = lazy(() => import('./pages/Login'));
+const AdminLogin = lazy(() => import('./pages/AdminLogin'));
+const SignUp = lazy(() => import('./pages/SignUp'));
+const DestinationPage = lazy(() => import('./pages/DestinationPage'));
+const ReviewDestinasi = lazy(() => import('./pages/ReviewDestinasi'));
+const UnduhPage = lazy(() => import('./pages/Unduh'));
+const CariDestinasi = lazy(() => import('./pages/CariDestinasi'));
+const ForgotPassword = lazy(() => import('./pages/ForgotPassword'));
+const PaymentSummary = lazy(() => import('./pages/PaymentSummary'));
+const AdminDashboard = lazy(() => import('./pages/AdminDashboard'));
+const AdminUsers = lazy(() => import('./pages/AdminUsers'));
+const AdminUserEdit = lazy(() => import('./pages/AdminUserEdit'));
+const AdminPackages = lazy(() => import('./pages/AdminPackages'));
+const AdminPackageDetail = lazy(() => import('./pages/AdminPackageDetail'));
+const AdminArticles = lazy(() => import('./pages/AdminArticles'));
+const AdminArticleForm = lazy(() => import('./pages/AdminArticleForm'));
+const AdminOrders = lazy(() => import('./pages/AdminOrders'));
+const AdminCommunity = lazy(() => import('./pages/AdminCommunity'));
+const Profile = lazy(() => import('./pages/Profile'));
+const AdminProfile = lazy(() => import('./pages/AdminProfile'));
 
 function ScrollToTop() {
   const { pathname } = useLocation();
@@ -43,18 +49,22 @@ function ScrollToTop() {
 function AppWrapper() {
   const location = useLocation();
 
-  const hideHeaderPaths = ["/login", "/signup", "/forgot-password", "/admin"];
-  const hideFooterPaths = ["/login", "/signup", "/forgot-password", "/admin"];
-  const hideProfileHeader = location.pathname === "/profile";
-  const hideHeader = hideHeaderPaths.some((p) => location.pathname.startsWith(p));
-  const hideFooter = hideFooterPaths.some((p) => location.pathname.startsWith(p));
+  const hideHeaderPaths = ['/login', '/signup', '/forgot-password', '/admin'];
+  const hideFooterPaths = ['/login', '/signup', '/forgot-password', '/admin'];
+  const hideProfileHeader = location.pathname === '/profile';
+  const hideHeader = hideHeaderPaths.some((p) =>
+    location.pathname.startsWith(p)
+  );
+  const hideFooter = hideFooterPaths.some((p) =>
+    location.pathname.startsWith(p)
+  );
 
   return (
     <>
       <ScrollToTop />
       {!hideHeader && !hideProfileHeader && <Header />}
 
-      <Suspense fallback={<div style={{minHeight: '60vh'}}>Loading...</div>}>
+      <Suspense fallback={<div style={{ minHeight: '60vh' }}>Loading...</div>}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />

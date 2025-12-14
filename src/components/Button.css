@@ -2,17 +2,26 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 10px;
-  padding: 14px 20px;
+  gap: 0.625rem;
+  padding: 0.625rem;
   border: none;
-  border-radius: 14px;
+  border-radius: 10px;
   font-size: 18px;
   font-weight: 600;
   cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
   text-decoration: none;
-  min-height: 52px;
-  font-family: "Inter", sans-serif;
+  max-height: 5rem;
+  min-height: 3rem;
+  height: 3.5rem;
+  max-width: 14.5rem;
+  min-width: 10rem;
+  width: 11rem;
+  align-self: center;
+  font-family: 'Inter', sans-serif;
   box-shadow: 0 12px 24px rgba(15, 10, 38, 0.12);
 }
 
@@ -68,12 +77,23 @@
 }
 
 .ui-btn--pink-light {
-  background-color: #f87171;
+  background-color: #ffb4c4;
   color: #ffffff;
 }
 
 .ui-btn--pink-light:hover:not(:disabled) {
-  background-color: #ec5a5a;
+  background-color: #ffb4c4;
+  filter: brightness(0.95);
+}
+
+.ui-btn--pink-danger {
+  background-color: #f87171;
+  color: #ffffff;
+}
+
+.ui-btn--pink-danger:hover:not(:disabled) {
+  background-color: #f87171;
+  filter: brightness(0.95);
 }
 
 .ui-btn--teal-light {

@@ -5,35 +5,35 @@ import Dest1 from "../assets/Dest1.png";
 import Dest2 from "../assets/Dest2.png";
 import Dest3 from "../assets/Dest3.png";
 import { useNavigate, useLocation } from "react-router-dom";
-import { fetchDashboard as fetchDashboardApi, type DashboardPayload, type Stat, type StatKey, type PackageStat, type Buyer, type StatusSegment, type TripRow } from "../api/dashboard";
+import { fetchDashboard as fetchDashboardApi, type DashboardPayload, type Stat, type StatKey, type PackageStat, type Buyer, type StatusSegment, type TripRow, type DashboardStats, type BookingStatus } from "../api/dashboard";
 
-const BASE_STATS: Stat[] = [
-  { key: "booking", label: "Total Booking", value: 200 },
-  { key: "profit", label: "Profit", value: 20000000 },
-  { key: "active", label: "Pembeli Aktif", value: 489 },
-];
+const BASE_STATS: DashboardStats = {
+  totalBooking: 200,
+  profit: 20000000,
+  pembeliAktif: 489
+};
 
 const BASE_PACKAGES: PackageStat[] = [
-  { title: "Paket Tour Korea", image: Dest1, progress: 75 },
-  { title: "Paket Tour Japan", image: Dest2, progress: 55 },
-  { title: "Paket Tour Eropa", image: Dest3, progress: 35 },
+  { name: "Paket Tour Korea", percentage: 75, imageUrl: Dest1 },
+  { name: "Paket Tour Japan", percentage: 55, imageUrl: Dest2 },
+  { name: "Paket Tour Eropa", percentage: 35, imageUrl: Dest3 },
 ];
 
 const BASE_BUYERS: Buyer[] = [
-  { name: "Sonya Nur Fadillah", bookings: 22, reviews: 20 },
-  { name: "Elsa Marta Saputri", bookings: 20, reviews: 20 },
-  { name: "Rinda Dwi Rahmawati", bookings: 18, reviews: 18 },
-  { name: "Mutiara Rengganis", bookings: 15, reviews: 15 },
-  { name: "Anisya Putri Niken", bookings: 12, reviews: 12 },
-  { name: "Farikh Assalsabila", bookings: 10, reviews: 10 },
+  { nama: "Sonya Nur Fadillah", totalBooking: 22, totalUlasan: 20 },
+  { nama: "Elsa Marta Saputri", totalBooking: 20, totalUlasan: 20 },
+  { nama: "Rinda Dwi Rahmawati", totalBooking: 18, totalUlasan: 18 },
+  { nama: "Mutiara Rengganis", totalBooking: 15, totalUlasan: 15 },
+  { nama: "Anisya Putri Niken", totalBooking: 12, totalUlasan: 12 },
+  { nama: "Farikh Assalsabila", totalBooking: 10, totalUlasan: 10 },
 ];
 
-const BASE_STATUS: StatusSegment[] = [
-  { label: "Paket Halal Tour Asia", value: 86, color: "#55c0f6" },
-  { label: "Paket Halal Tour Eropa", value: 70, color: "#f776b9" },
-  { label: "Paket Halal Tour Australia", value: 42, color: "#aabdf5" },
-  { label: "Paket Halal Tour Afrika", value: 75, color: "#61d4a5" },
-];
+const BASE_STATUS: BookingStatus = {
+  asia: 86,
+  eropa: 70,
+  australia: 42,
+  afrika: 75
+};
 
 const BASE_TRIPS: TripRow[] = [
   { buyer: "Sonya Nur", tour: "Uzbekistan", price: 21500000 },
@@ -165,7 +165,11 @@ export default function AdminDashboard() {
   const location = useLocation();
 
   const totalStatus = useMemo(
-    () => (dashboardData.status || []).reduce((sum, s) => sum + s.value, 0),
+    () => {
+      const statusValues = dashboardData.status;
+      if (!statusValues) return 0;
+      return Object.values(statusValues).reduce((sum, value) => sum + (value || 0), 0);
+    },
     [dashboardData.status]
   );
 
@@ -176,11 +180,11 @@ export default function AdminDashboard() {
     try {
       const payload = await fetchDashboardApi();
       setDashboardData((prev) => ({
-        stats: payload.stats && payload.stats.length ? payload.stats : prev.stats || BASE_STATS,
-        packages: payload.packages && payload.packages.length ? payload.packages : prev.packages || BASE_PACKAGES,
-        buyers: payload.buyers && payload.buyers.length ? payload.buyers : prev.buyers || BASE_BUYERS,
-        status: payload.status && payload.status.length ? payload.status : prev.status || BASE_STATUS,
-        trips: payload.trips && payload.trips.length ? payload.trips : prev.trips || BASE_TRIPS,
+        stats: payload.stats ? payload.stats : prev.stats || BASE_STATS,
+        packages: payload.packages && Array.isArray(payload.packages) && payload.packages.length ? payload.packages : prev.packages || BASE_PACKAGES,
+        buyers: payload.buyers && Array.isArray(payload.buyers) && payload.buyers.length ? payload.buyers : prev.buyers || BASE_BUYERS,
+        status: payload.status ? payload.status : prev.status || BASE_STATUS,
+        trips: payload.trips && Array.isArray(payload.trips) && payload.trips.length ? payload.trips : prev.trips || BASE_TRIPS,
       }));
     } catch {
       setDashboardData((prev) => ({
@@ -255,11 +259,11 @@ export default function AdminDashboard() {
               onClick={() => setNavOpen(true)}
             >
               <span />
-            <span />
-            <span />
-          </button>
-          <h1>Dashboard Admin</h1>
-        </div>
+              <span />
+              <span />
+            </button>
+            <h1>Dashboard Admin</h1>
+          </div>
           <div className="ad-user-wrapper" ref={userMenuRef}>
             <button className="ad-user" type="button" onClick={() => setProfileOpen((v) => !v)}>
               <img src="/avatar.jpg" alt="Admin" />
@@ -298,15 +302,18 @@ export default function AdminDashboard() {
         </header>
 
         <section className="ad-stat-row">
-          {(dashboardData.stats || []).map((s) => (
+          {(dashboardData.stats ? [
+            { key: 'booking', label: 'Total Booking', value: dashboardData.stats.totalBooking },
+            { key: 'profit', label: 'Profit', value: dashboardData.stats.profit },
+            { key: 'active', label: 'Pembeli Aktif', value: dashboardData.stats.pembeliAktif }
+          ] : []).map((s) => (
             <div key={s.key} className="ad-stat-card">
               <div className="ad-stat-icon">
-                <StatIcon name={s.key} />
+                <StatIcon name={s.key as StatKey} />
               </div>
               <div className="ad-stat-label">{s.label}</div>
               <div className="ad-stat-value">
-                {s.key === "profit" ? formatCurrency(s.value) : s.value}
-                {s.suffix}
+                {s.key === 'profit' ? formatCurrency(s.value) : s.value}
               </div>
             </div>
           ))}
@@ -316,16 +323,16 @@ export default function AdminDashboard() {
           <div className="ad-card ad-packages">
             <h3>Paket Tour Teratas</h3>
             <div className="ad-package-list">
-              {(dashboardData.packages || []).map((p) => (
-                <div key={p.title} className="ad-package-item">
-                  <img src={p.image} alt={p.title} />
-                    <div className="ad-package-info">
-                    <div className="ad-package-title">{p.title}</div>
+              {(dashboardData.packages || []).map((p, index) => (
+                <div key={p.name || index} className="ad-package-item">
+                  <img src={p.imageUrl} alt={p.name} />
+                  <div className="ad-package-info">
+                    <div className="ad-package-title">{p.name}</div>
                     <div className="ad-progress">
                       <div className="ad-progress-bar">
-                        <span style={{ width: `${Math.min(100, p.progress ?? 0)}%` }} />
+                        <span style={{ width: `${Math.min(100, p.percentage)}%` }} />
                       </div>
-                      <div className="ad-progress-value">{p.progress ?? 0}%</div>
+                      <div className="ad-progress-value">{p.percentage}%</div>
                     </div>
                   </div>
                 </div>
@@ -336,13 +343,13 @@ export default function AdminDashboard() {
           <div className="ad-card ad-buyers">
             <div className="ad-card-head">Pembeli Teratas</div>
             <div className="ad-buyer-list">
-              {(dashboardData.buyers || []).map((b) => (
-                <div key={b.name} className="ad-buyer-item">
-                  <img src={b.avatar || avatarDefault} alt={b.name} />
+              {(dashboardData.buyers || []).map((b, index) => (
+                <div key={b.nama || index} className="ad-buyer-item">
+                  <img src={b.profileImage || avatarDefault} alt={b.nama} />
                   <div className="ad-buyer-info">
-                    <div className="ad-buyer-name">{b.name}</div>
+                    <div className="ad-buyer-name">{b.nama}</div>
                     <div className="ad-buyer-meta">
-                      {b.bookings} Booking • {b.reviews} Ulasan
+                      {b.totalBooking} Booking • {b.totalUlasan} Ulasan
                     </div>
                   </div>
                 </div>
@@ -358,42 +365,53 @@ export default function AdminDashboard() {
               <div className="ad-donut">
                 <svg viewBox="0 0 120 120">
                   <circle className="ad-donut-bg" cx="60" cy="60" r="42" />
-                  {(dashboardData.status || []).reduce<{ offset: number; nodes: React.ReactNode[] }>(
-                    (acc, seg) => {
-                      const pct = totalStatus ? (seg.value / totalStatus) * 100 : 0;
-                      const dash = (pct * 2 * Math.PI * 42) / 100;
-                      const gap = 2 * Math.PI * 42 - dash;
-                      acc.nodes.push(
-                        <circle
-                          key={seg.label}
-                          className="ad-donut-seg"
-                          stroke={seg.color}
-                          cx="60"
-                          cy="60"
-                          r="42"
-                          strokeDasharray={`${dash} ${gap}`}
-                          strokeDashoffset={acc.offset}
-                        />
-                      );
-                      acc.offset -= dash;
-                      return acc;
-                    },
-                    { offset: 0, nodes: [] }
-                  ).nodes}
+                  {Object.entries(dashboardData.status || {}).map(([label, value], index, arr) => {
+                    // Calculate percentage for each segment
+                    const total = Object.values(dashboardData.status || {}).reduce((sum, val) => sum + val, 0);
+                    const pct = total ? (value / total) * 100 : 0;
+                    const dash = (pct * 2 * Math.PI * 42) / 100;
+                    const gap = 2 * Math.PI * 42 - dash;
+
+                    // Define colors for each segment
+                    const colors = ['#55c0f6', '#f776b9', '#aabdf5', '#61d4a5'];
+                    const color = colors[index % colors.length];
+
+                    // Calculate offset based on previous segments
+                    const prevSegments = arr.slice(0, index);
+                    const prevTotal = prevSegments.reduce((sum, [_, val]) => sum + ((val / total) * 100), 0);
+                    const offset = -(prevTotal * 2 * Math.PI * 42) / 100;
+
+                    return (
+                      <circle
+                        key={label}
+                        className="ad-donut-seg"
+                        stroke={color}
+                        cx="60"
+                        cy="60"
+                        r="42"
+                        strokeDasharray={`${dash} ${gap}`}
+                        strokeDashoffset={offset}
+                      />
+                    );
+                  })}
                 </svg>
                 <div className="ad-donut-center">
                   <div className="ad-donut-number">
-                    {(dashboardData.status || []).reduce((sum, s) => sum + s.value, 0)}
+                    {Object.values(dashboardData.status || {}).reduce((sum, val) => sum + val, 0)}
                   </div>
                 </div>
               </div>
               <div className="ad-legend">
-                {(dashboardData.status || []).map((s) => (
-                  <div key={s.label} className="ad-legend-item">
-                    <span className="ad-legend-dot" style={{ background: s.color }} />
-                    <span>{s.label}</span>
-                  </div>
-                ))}
+                {Object.entries(dashboardData.status || {}).map(([label, value], index) => {
+                  const colors = ['#55c0f6', '#f776b9', '#aabdf5', '#61d4a5'];
+                  const color = colors[index % colors.length];
+                  return (
+                    <div key={label} className="ad-legend-item">
+                      <span className="ad-legend-dot" style={{ backgroundColor: color }} />
+                      <span>{label.charAt(0).toUpperCase() + label.slice(1)}</span>
+                    </div>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -406,8 +424,8 @@ export default function AdminDashboard() {
                 <span>Paket Tour</span>
                 <span>Harga</span>
               </div>
-              {(dashboardData.trips || []).map((t) => (
-                <div key={t.buyer + t.tour} className="ad-trip-row">
+              {(dashboardData.trips || []).map((t, index) => (
+                <div key={`${t.buyer}-${index}`} className="ad-trip-row">
                   <div className="ad-trip-buyer">
                     <img src={avatarDefault} alt={t.buyer} />
                     <span>{t.buyer}</span>

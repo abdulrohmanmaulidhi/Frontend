@@ -1,44 +1,86 @@
 // src/pages/SignUp.tsx
-import { FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import "./Login.css";
-import { register as registerApi } from "../api/auth"; // axios helper
+import { FormEvent, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import './SignUp.css';
+import { register as registerApi } from '../api/auth'; // axios helper
+import Input from '../components/Input';
+import Button from '../components/Button';
+import { ToastContainer, ToastItem } from '../components/Toast';
+import { EmailIcon, ProfileIcon, TelephoneIcon } from '../assets/icon';
+import { LogoImage } from '../assets/images';
 
 export default function SignUp() {
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState(""); // bisa disimpan ke FE saja dulu
-  const [password, setPassword] = useState("");
-  const [confirm, setConfirm] = useState("");
+  const [fullName, setFullName] = useState('');
+  const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
+  const [password, setPassword] = useState('');
+  const [confirm, setConfirm] = useState('');
   const [agree, setAgree] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
 
   const navigate = useNavigate();
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const addToast = (
+    message: string,
+    variant: 'success' | 'error' | 'warning' | 'info' | 'pink' = 'info',
+    title?: string
+  ) => {
+    const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    setToasts((prev) => [...prev, { id, message, variant, title }]);
+  };
+
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     if (loading) return;
 
     if (!agree) {
-      alert("Harap setujui kebijakan privasi terlebih dahulu");
+      addToast(
+        'Silakan setujui kebijakan privasi terlebih dahulu',
+        'error',
+        'Kebijakan Privasi'
+      );
       return;
     }
 
     if (password !== confirm) {
-      alert("Password dan konfirmasi tidak sama");
+      addToast(
+        'Password dan konfirmasi tidak sama',
+        'error',
+        'Konfirmasi Password'
+      );
       return;
     }
 
     try {
       setLoading(true);
 
-      // kirim ke backend (phone bisa ditambahkan kalau BE siap)
-      await registerApi(fullName, email, password);
+      // kirim ke backend with all required fields
+      await registerApi(fullName, email, password, agree, phone);
 
-      alert("Registrasi berhasil, silakan login");
-      navigate("/login");
+      addToast(
+        'Akun Anda telah berhasil dibuat',
+        'success',
+        'Registrasi Berhasil'
+      );
+      setTimeout(() => {
+        navigate('/login');
+      }, 2000); // Redirect after 2 seconds to let user see success message
     } catch (err: any) {
-      alert(err.message || "Registrasi gagal");
+      addToast(
+        err.message || 'Registrasi gagal, silakan coba lagi',
+        'error',
+        'Registrasi Gagal'
+      );
     } finally {
       setLoading(false);
     }
@@ -51,7 +93,13 @@ export default function SignUp() {
           <div className="auth-hero-inner">
             <div className="auth-hero-brand">
               <div className="auth-hero-logo">
-                <img src="/logo.svg" alt="Saleema Tour" />
+                <Link to="/">
+                  <img
+                    src={LogoImage}
+                    alt="Saleema Tour"
+                    style={{ cursor: 'pointer' }}
+                  />
+                </Link>
               </div>
               <div className="auth-hero-textbrand">
                 <span className="auth-hero-title">Saleema</span>
@@ -74,90 +122,58 @@ export default function SignUp() {
             <h1 className="auth-title">Sign Up</h1>
 
             <form onSubmit={handleSubmit} className="auth-form">
-              <label className="auth-field">
-                <span className="auth-label">Nama Lengkap</span>
-                <div className="auth-input-wrap">
-                  <input
-                    type="text"
-                    placeholder="Masukkan nama lengkap..."
-                    value={fullName}
-                    onChange={(e) => setFullName(e.target.value)}
-                    required
-                  />
-                  <img
-                    src="/icon-user.svg"
-                    alt=""
-                    className="auth-input-icon"
-                  />
-                </div>
-              </label>
+              <Input
+                label="Nama Lengkap"
+                type="text"
+                placeholder="Masukkan nama lengkap..."
+                value={fullName}
+                onChange={(e) => setFullName(e.target.value)}
+                required
+                icon={ProfileIcon}
+              />
 
-              <label className="auth-field">
-                <span className="auth-label">Email</span>
-                <div className="auth-input-wrap">
-                  <input
-                    type="email"
-                    placeholder="Masukkan email..."
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                  <img src="/icon-mail.svg" alt="" className="auth-input-icon" />
-                </div>
-              </label>
+              <Input
+                label="Email"
+                type="email"
+                placeholder="Masukkan email..."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                icon={EmailIcon}
+              />
 
-              <label className="auth-field">
-                <span className="auth-label">Nomor Telepon</span>
-                <div className="auth-input-wrap">
-                  <input
-                    type="tel"
-                    placeholder="Masukkan nomor telepon..."
-                    value={phone}
-                    onChange={(e) => setPhone(e.target.value)}
-                  />
-                  <img
-                    src="/icon-phone.svg"
-                    alt=""
-                    className="auth-input-icon"
-                  />
-                </div>
-              </label>
+              <Input
+                label="Nomor Telepon"
+                type="tel"
+                placeholder="Masukkan nomor telepon..."
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                icon={TelephoneIcon}
+              />
 
-              <label className="auth-field">
-                <span className="auth-label">Password</span>
-                <div className="auth-input-wrap">
-                  <input
-                    type="password"
-                    placeholder="Masukkan password..."
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                  <img
-                    src="/icon-eye-off.svg"
-                    alt=""
-                    className="auth-input-icon"
-                  />
-                </div>
-              </label>
+              <Input
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Masukkan password..."
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                showPasswordToggle
+                onPasswordToggle={togglePasswordVisibility}
+                isPasswordVisible={showPassword}
+              />
 
-              <label className="auth-field">
-                <span className="auth-label">Konfirmasi Password</span>
-                <div className="auth-input-wrap">
-                  <input
-                    type="password"
-                    placeholder="Masukkan kembali password..."
-                    value={confirm}
-                    onChange={(e) => setConfirm(e.target.value)}
-                    required
-                  />
-                  <img
-                    src="/icon-eye-off.svg"
-                    alt=""
-                    className="auth-input-icon"
-                  />
-                </div>
-              </label>
+              <Input
+                label="Konfirmasi Password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Masukkan kembali password..."
+                value={confirm}
+                onChange={(e) => setConfirm(e.target.value)}
+                required
+                showPasswordToggle
+                onPasswordToggle={togglePasswordVisibility}
+                isPasswordVisible={showPassword}
+              />
 
               <div className="auth-row auth-row-small">
                 <label className="auth-remember">
@@ -173,13 +189,9 @@ export default function SignUp() {
                 </label>
               </div>
 
-              <button
-                type="submit"
-                className="auth-btn-primary"
-                disabled={loading}
-              >
-                {loading ? "Memproses..." : "Sign Up"}
-              </button>
+              <Button type="submit" disabled={loading} variant="pink-light">
+                {loading ? 'Memproses...' : 'Sign Up'}
+              </Button>
 
               <div className="auth-row auth-row-center auth-bottom-text">
                 <span>Sudah punya akun? </span>
@@ -191,6 +203,8 @@ export default function SignUp() {
           </div>
         </div>
       </div>
+
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>
   );
 }

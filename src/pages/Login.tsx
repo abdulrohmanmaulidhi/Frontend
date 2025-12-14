@@ -1,16 +1,41 @@
-import type { FormEvent } from "react";
-import { useState } from "react";
-import { Link, useNavigate, useLocation } from "react-router-dom";
-import "./Login.css";
-import { login as loginApi } from "../api/auth";
+import './Login.css';
+import type { FormEvent } from 'react';
+import { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { login as loginApi } from '../api/auth';
+import Input from '../components/Input';
+import Button from '../components/Button';
+import { ToastContainer, ToastItem } from '../components/Toast';
+import { EmailIcon } from '../assets/icon';
+import { LogoImage } from '../assets/images';
 
 export default function Login() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [remember, setRemember] = useState(false);
   const [loading, setLoading] = useState(false);
+  const [toasts, setToasts] = useState<ToastItem[]>([]);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // Toggle password visibility
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const addToast = (
+    message: string,
+    variant: 'success' | 'error' | 'warning' | 'info' | 'pink' = 'info',
+    title?: string
+  ) => {
+    const id = `toast-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+    setToasts((prev) => [...prev, { id, message, variant, title }]);
+  };
+
+  const removeToast = (id: string) => {
+    setToasts((prev) => prev.filter((toast) => toast.id !== id));
+  };
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -21,19 +46,24 @@ export default function Login() {
       await loginApi(email, password);
 
       if (remember) {
-        localStorage.setItem("remember_email", email);
+        localStorage.setItem('remember_email', email);
       } else {
-        localStorage.removeItem("remember_email");
+        localStorage.removeItem('remember_email');
       }
 
-      localStorage.setItem("isLoggedIn", "1");
-      const redirectTarget = email === "admin@saleema.test" ? "/admin" : location.state?.from;
+      localStorage.setItem('isLoggedIn', '1');
+      const redirectTarget =
+        email === 'admin@saleema.test' ? '/admin' : location.state?.from;
       const bookingIntent = location.state?.booking;
-      navigate(redirectTarget ?? "/home", {
+      navigate(redirectTarget ?? '/home', {
         state: bookingIntent ? { booking: true } : undefined,
       });
     } catch (err: any) {
-      alert(err.message || "Login gagal");
+      addToast(
+        err.message || 'Login gagal, silakan coba lagi',
+        'error',
+        'Login Gagal'
+      );
     } finally {
       setLoading(false);
     }
@@ -46,7 +76,13 @@ export default function Login() {
           <div className="auth-hero-inner">
             <div className="auth-hero-brand">
               <div className="auth-hero-logo">
-                <img src="/logo.svg" alt="Saleema Tour" />
+                <Link to="/">
+                  <img
+                    src={LogoImage}
+                    alt="Saleema Tour"
+                    style={{ cursor: 'pointer' }}
+                  />
+                </Link>
               </div>
               <div className="auth-hero-textbrand">
                 <span className="auth-hero-title">Saleema</span>
@@ -69,37 +105,27 @@ export default function Login() {
             <h1 className="auth-title">Sign In</h1>
 
             <form onSubmit={handleSubmit} className="auth-form">
-              <label className="auth-field">
-                <span className="auth-label">Email</span>
-                <div className="auth-input-wrap">
-                  <input
-                    type="email"
-                    placeholder="Masukkan email..."
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
-                  <img src="/icon-mail.svg" alt="" className="auth-input-icon" />
-                </div>
-              </label>
+              <Input
+                label="Email"
+                type="email"
+                placeholder="Masukkan email..."
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                icon={EmailIcon}
+              />
 
-              <label className="auth-field">
-                <span className="auth-label">Password</span>
-                <div className="auth-input-wrap">
-                  <input
-                    type="password"
-                    placeholder="Masukkan password..."
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
-                  <img
-                    src="/icon-eye-off.svg"
-                    alt=""
-                    className="auth-input-icon"
-                  />
-                </div>
-              </label>
+              <Input
+                label="Password"
+                type={showPassword ? 'text' : 'password'}
+                placeholder="Masukkan password..."
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                showPasswordToggle
+                onPasswordToggle={togglePasswordVisibility}
+                isPasswordVisible={showPassword}
+              />
 
               <div className="auth-row auth-row-small">
                 <label className="auth-remember">
@@ -113,19 +139,15 @@ export default function Login() {
                 <button
                   type="button"
                   className="auth-link-button auth-forgot"
-                  onClick={() => navigate("/forgot-password")}
+                  onClick={() => navigate('/forgot-password')}
                 >
                   Lupa Password?
                 </button>
               </div>
 
-              <button
-                type="submit"
-                className="auth-btn-primary"
-                disabled={loading}
-              >
-                {loading ? "Memproses..." : "Sign In"}
-              </button>
+              <Button type="submit" disabled={loading} variant="pink-light">
+                {loading ? 'Memproses...' : 'Sign In'}
+              </Button>
 
               <div className="auth-row auth-row-center auth-bottom-text">
                 <span>Belum punya akun? </span>
@@ -133,21 +155,12 @@ export default function Login() {
                   Sign Up
                 </Link>
               </div>
-
-              <div className="auth-or">atau login dengan</div>
-
-              <div className="auth-social-row">
-                <button type="button" className="auth-social-btn">
-                  <img src="/icon-google.svg" alt="Google" />
-                </button>
-                <button type="button" className="auth-social-btn">
-                  <img src="/icon-instagram.svg" alt="Instagram" />
-                </button>
-              </div>
             </form>
           </div>
         </div>
       </div>
+
+      <ToastContainer toasts={toasts} onRemove={removeToast} />
     </div>
   );
 }

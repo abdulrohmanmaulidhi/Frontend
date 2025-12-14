@@ -5,7 +5,9 @@
   left: 0;
   width: 100%;
   z-index: 1000;
-  transition: background 0.3s ease, box-shadow 0.3s ease;
+  transition:
+    background 0.3s ease,
+    box-shadow 0.3s ease;
 }
 
 .st-header--transparent {
@@ -37,8 +39,8 @@
 }
 
 .st-logo-circle {
-  width: 52px;
-  height: 52px;
+  width: 3.90069rem;
+  height: 4.09906rem;
   min-width: 52px;
   border-radius: 50%;
   background: transparent;
@@ -65,27 +67,26 @@
 .st-brand {
   display: flex;
   align-items: center;
-  gap: 4px; 
+  gap: 4px;
 }
 .st-brand-link {
   display: inline-flex;
-  flex-direction: column; 
+  flex-direction: column;
   gap: 5px;
   text-decoration: none;
   color: inherit;
 }
 .st-brand-title {
-  font-family: "Inter", sans-serif;
-  font-weight: 700;
+  font-family: 'Inter', Arial, Helvetica, sans-serif;
+  font-weight: 600;
   font-size: 20px;
   color: #ffffff;
   margin: 0;
   padding: 0;
-  
 }
 
 .st-brand-sub {
-  font-family: "Inter", sans-serif;
+  font-family: 'Inter', sans-serif;
   font-weight: 600;
   font-size: 18px;
   color: #ffffff;
@@ -104,11 +105,13 @@
 
 .st-nav a {
   font-size: clamp(1rem, 1.25vw, 1.25rem);
-  font-weight: 800;
+  font-weight: 700;
   color: white;
   text-decoration: none;
   padding: 0.625rem 0.75rem;
-  transition: opacity 0.2s, transform 0.2s;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
   white-space: nowrap;
   position: relative;
 }
@@ -145,24 +148,28 @@
   width: 46px;
   height: 46px;
   border-radius: 50%;
-  background: rgba(255,255,255,0.25);
-  padding: 4px;
+  background: transparent;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  cursor: pointer;
 }
 
 .st-avatar img {
   width: 100%;
   height: 100%;
-  object-fit: contain;
+  object-fit: cover;
   display: block;
+  border-radius: 50%;
 }
 
 .st-avatar:hover {
   transform: scale(1.1);
   opacity: 0.9;
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .st-avatar svg {
@@ -250,6 +257,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    border: 2px solid rgba(255, 255, 255, 0.3);
   }
 
   .st-menu-toggle {
@@ -261,7 +269,7 @@
     height: 34px;
     padding: 4px;
     border: none;
-    background: rgba(255,255,255,0.06);
+    background: rgba(255, 255, 255, 0.06);
     border-radius: 8px;
     align-items: center;
     cursor: pointer;
@@ -280,7 +288,7 @@
     display: flex;
     position: fixed;
     inset: 64px 0 0 0;
-    background: rgba(0,0,0,0.6);
+    background: rgba(0, 0, 0, 0.6);
     flex-direction: column;
     align-items: center;
     padding-top: 1rem;
@@ -312,17 +320,17 @@
     display: flex;
     position: fixed;
     top: 0;
-    right: 0;                 
+    right: 0;
     height: 100vh;
-    width: 320px;           
+    width: 320px;
     max-width: 85%;
     background: #6d4891;
     flex-direction: column;
     align-items: stretch;
-    padding: 72px 0 20px 0;  
+    padding: 72px 0 20px 0;
     gap: 0;
     z-index: 1300;
-    box-shadow: 4px 0 20px rgba(0,0,0,0.3);
+    box-shadow: 4px 0 20px rgba(0, 0, 0, 0.3);
     transform: translateX(0);
     transition: transform 0.28s ease;
     overflow-y: auto;
@@ -346,7 +354,7 @@
   .st-nav.st-nav--open a {
     display: block;
     padding: 20px 28px;
-    border-bottom: 1px solid rgba(255,255,255,0.08);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     color: white;
     font-weight: 800;
     font-size: 1.05rem;
@@ -355,12 +363,12 @@
   }
 
   .st-nav.st-nav--open a:hover {
-    background: rgba(255,255,255,0.03);
+    background: rgba(255, 255, 255, 0.03);
   }
 
   /* Highlight current (optional) */
   .st-nav.st-nav--open a.active {
-    background: rgba(0,0,0,0.12);
+    background: rgba(0, 0, 0, 0.12);
     font-weight: 900;
   }
 
@@ -369,7 +377,7 @@
     width: 8px;
   }
   .st-nav.st-nav--open::-webkit-scrollbar-thumb {
-    background: rgba(0,0,0,0.25);
+    background: rgba(0, 0, 0, 0.25);
     border-radius: 6px;
   }
 
@@ -380,9 +388,11 @@
 }
 
 @media (max-width: 768px) {
-
   /* pastikan nav dasar tidak tampil */
-  .st-nav { display: none !important; left: auto !important; }
+  .st-nav {
+    display: none !important;
+    left: auto !important;
+  }
 
   /* drawer MURNI nempel di KANAN */
   .st-nav.st-nav--open {
@@ -398,7 +408,7 @@
     flex-direction: column !important;
     padding-top: 80px !important;
     z-index: 2000 !important;
-    box-shadow: -6px 0 24px rgba(0,0,0,0.35) !important;
+    box-shadow: -6px 0 24px rgba(0, 0, 0, 0.35) !important;
     border-top-left-radius: 12px !important;
     border-bottom-left-radius: 12px !important;
     overflow-y: auto !important;
@@ -408,22 +418,25 @@
   }
 
   @keyframes slideRight {
-    from { transform: translateX(100%); }
-    to   { transform: translateX(0); }
+    from {
+      transform: translateX(100%);
+    }
+    to {
+      transform: translateX(0);
+    }
   }
 
-@media (max-width: 768px) {
-
-  .st-drawer-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background: rgba(0,0,0,0.45); /* gelap */
-    z-index: 1500; /* lebih rendah dari drawer (2000) */
+  @media (max-width: 768px) {
+    .st-drawer-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.45); /* gelap */
+      z-index: 1500; /* lebih rendah dari drawer (2000) */
+    }
   }
-}
 
   /* tombol close tetap di pojok kanan drawer */
   .st-nav-close {
@@ -439,7 +452,9 @@
   }
 
   /* pastikan header berada di atas drawer jika perlu */
-  .st-header { z-index: 2100 !important; }
+  .st-header {
+    z-index: 2100 !important;
+  }
 }
 
 .st-nav.st-nav--open .st-drawer-header {
@@ -447,8 +462,8 @@
   align-items: center;
   gap: 12px;
   padding: 18px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  background: rgba(255,255,255,0.02);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  background: rgba(255, 255, 255, 0.02);
 }
 
 /* logo kotak */
@@ -461,7 +476,7 @@
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  background: rgba(255,255,255,0.06);
+  background: rgba(255, 255, 255, 0.06);
 }
 .st-drawer-logo img {
   width: 90%;
@@ -504,5 +519,5 @@
 @media (max-width: 768px) {
   .st-nav .st-drawer-header {
     display: flex;
-  }}
-
+  }
+}

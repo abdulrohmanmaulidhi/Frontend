@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Home.css'; // Pastikan file CSS ini digunakan
+import './Home.css';
 import Header from '../components/Header';
 import Button from '../components/Button';
 import StatCard from '../components/StatCard';
@@ -8,9 +8,7 @@ import SearchBar from '../components/SearchBar';
 import { fetchDestinations, type Destination } from '../api/destinations';
 import { fetchArticles, type Article } from '../api/articles';
 import { pushRecentDestination } from '../utils/recentDestinations';
-// Jika asset tidak ditempatkan di folder assets relatif terhadap file ini, sesuaikan pathnya
-import HeroBg from '../assets/hero-bg.png';
-import TourBg from '../assets/2.png';
+import { StatsImage } from '../assets/images';
 
 function HeroSection() {
   const navigate = useNavigate();
@@ -126,9 +124,10 @@ function CTASection() {
           terjamin, dan fasilitas ibadah yang mudah dijangkau.
         </h2>
         <Button
-          variant="purple-light"
+          variant="white-hover-purple"
           showArrows={false}
           onClick={() => navigate('/cari-destinasi')}
+          style={{ fontSize: '15px' }}
         >
           Temukan Destinasi
         </Button>
@@ -237,14 +236,14 @@ function StatsSection() {
         </div>
 
         <div className="stats-image" aria-hidden="true">
-          <img src="/desher1.png" alt="Destinasi unggulan" loading="lazy" />
+          <img src={StatsImage} alt="Destinasi unggulan" loading="lazy" />
         </div>
       </div>
     </section>
   );
 }
 
-// Testimonial Section
+// mmonial Section
 function TestimonialSection() {
   return (
     <section className="testimonial-section">

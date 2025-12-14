@@ -9,6 +9,7 @@ export { default as AvatarDefaultIcon } from './avatar-default.svg';
 export { default as EditProfileIcon } from './edit-profile.svg';
 export { default as LogOutIcon } from './log-out.svg';
 export { default as IconPlaceholderProfileIcon } from './icon-placeholder-profile.svg';
+export { default as ChevronDown } from './chevron-down.svg';
 
 // PNG Icons
 export { default as AirportIcon } from './airport.png';

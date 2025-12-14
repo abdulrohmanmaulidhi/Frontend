@@ -1,8 +1,8 @@
 .lp-footer {
   background: #6d4891;
   color: white;
-  padding: 56px 24px 32px;
-  font-family: "Inter", sans-serif;
+  /* padding: 56px 24px 32px; */
+  font-family: 'Inter', sans-serif;
 }
 
 .lp-footer-inner {
@@ -131,7 +131,9 @@
   align-items: center;
   justify-content: center;
   color: white;
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 .lp-footer-social-btn:hover {
@@ -146,6 +148,7 @@
   text-align: center;
   font-size: 14px;
   color: rgba(255, 255, 255, 0.8);
+  box-sizing: border-box;
 }
 
 @media (max-width: 768px) {

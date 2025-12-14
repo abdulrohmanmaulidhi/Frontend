@@ -15,3 +15,4 @@ export { default as LoginPng } from './login.png';
 export { default as RegisterPng } from './register.jpg';
 export { default as ForgotPasswordPng } from './forgot-password.jpg';
 export { default as ForgotPasswordEmailPng } from './forgot-password-email.jpg';
+export { default as StatsImage } from './stats-image.jpg';
